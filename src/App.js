@@ -3,6 +3,7 @@ import MetroSelectBox from './components/MetroSelectBox';
 import TextBox from './components/TextBox';
 import Button from './components/Button';
 import JobsTable from './components/JobsTable';
+import Map from './containers/Map'
 
 export default class App extends Component {
   constructor(props){
@@ -20,11 +21,11 @@ export default class App extends Component {
 
   onFindJobs = () => {
     this.setState({ isLoadData: false });
-    const perPage = 'per_page=10' //количество вакансий на странице
+    const perPage = 'per_page=50' //количество вакансий на странице
     const metro = +this.state.metroStationId ? 'metro='+this.state.metroStationId : '';
     const text = 'text='+this.state.text.split(' ').join('+');
     const addUrl = [perPage, metro, text].join('&')
-    const baseUrl = 'https://api.hh.ru/vacancies?only_with_salary=true&'+addUrl;
+    const baseUrl = 'https://api.hh.ru/vacancies?'+addUrl;
     fetch(`${baseUrl}`)
       .then(response => {
         if (response.ok) {
@@ -80,6 +81,17 @@ export default class App extends Component {
           Поиск
           </Button>
       </div>
+
+      <div className="row">
+        { isLoadData ?
+            (
+              <Map data={data}/>
+            ) : (
+              <div>Empty map...</div>
+            )
+          }
+      </div>
+
       <div className="row justify-content-center">
         { isLoadData ?
           (
@@ -89,6 +101,7 @@ export default class App extends Component {
           )
         }
       </div>
+      
       
     </div>)
     
