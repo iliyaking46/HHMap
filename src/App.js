@@ -10,7 +10,7 @@ export default class App extends Component {
     this.state = {
       metro: [], //тут хранятся все линии, а в них станции (stations)
       data: [], //вакансии
-      metroStationId: '4.73', //хранится конкретная станция (поставил кутузувскую, там вакансии есть)
+      metroStationId: '', //хранится конкретная станция (поставил кутузувскую, там вакансии есть)
       text: 'react', //фраза для поиска
       isLoad: false,
       isLoadData: false,
@@ -21,10 +21,10 @@ export default class App extends Component {
   onFindJobs = () => {
     this.setState({ isLoadData: false });
     const perPage = 'per_page=10' //количество вакансий на странице
-    const metro = 'metro='+this.state.metroStationId;
+    const metro = +this.state.metroStationId ? 'metro='+this.state.metroStationId : '';
     const text = 'text='+this.state.text.split(' ').join('+');
     const addUrl = [perPage, metro, text].join('&')
-    const baseUrl = 'https://api.hh.ru/vacancies?'+addUrl;
+    const baseUrl = 'https://api.hh.ru/vacancies?only_with_salary=true&'+addUrl;
     fetch(`${baseUrl}`)
       .then(response => {
         if (response.ok) {
@@ -62,30 +62,32 @@ export default class App extends Component {
       <h1 className="text-center" >HH Map Jobs-Finder</h1>
       <div className="row">
         <div>
-        <MetroSelectBox
-          value={metroStationId}
-          metro={metro}
-          onChange={id => this.setState({metroStationId: id})}
-        />
-        </div>
-        <div className="col">
-          <TextBox
-            onChange={(value) => this.setState({text: value})}
-            value={text}
-          />
-        </div>
-        <Button
-          onClick={this.onFindJobs}
-        >
-        Поиск
-        </Button>
+            <MetroSelectBox
+              value={metroStationId}
+              metro={metro}
+              onChange={id => this.setState({metroStationId: id})}
+            />
+          </div>
+          <div className="col">
+            <TextBox
+              onChange={(value) => this.setState({text: value})}
+              value={text}
+            />
+          </div>
+          <Button
+            onClick={this.onFindJobs}
+          >
+          Поиск
+          </Button>
       </div>
       <div className="row justify-content-center">
-        {(() => {
-            if (isLoadData) { 
-              return <JobsTable data={data}/>;
-            }
-        })()}
+        { isLoadData ?
+          (
+            <JobsTable data={data}/>
+          ) : (
+            <div>Data is loading...</div>
+          )
+        }
       </div>
       
     </div>)

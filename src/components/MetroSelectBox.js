@@ -8,18 +8,16 @@ export const MetroSelectBox =  (props) => {
       value={value}
       onChange={e => {onChange(e.target.value)}}
     >
-      {metro.map(line => {
-        return (
-        <optgroup label={line.name} key={line.id} style={{color: '#'+line.hex_color}}>
-          {line.stations.map(station => {
-            return (
-              <option key={station.id} value={station.id} style={{ color: '#000' }}>
-                {station.name}
-              </option>
-            )
-          })}
-        </optgroup>
-        )
+      {metro.sort( (a, b) => a.name > b.name ? 1 : -1 ).map(line => {
+        return ([
+          <option value={0} key={0}>Выберете станцию</option>,
+          <option value={line.id} key={line.id} style={{color: '#'+line.hex_color}}>{line.name}</option>,
+          line.stations.sort( (a,b) => a.name > b.name ? 1 : -1 ).map(station => (
+            <option key={station.id} value={station.id} className="ml-2" >
+              {station.name}
+            </option>
+          ))
+        ])
       })
       }
     </select>
