@@ -12,7 +12,7 @@ export default class App extends Component {
       metro: [], //тут хранятся все линии, а в них станции (stations)
       data: [], //вакансии
       metroStationId: '', //хранится конкретная станция (поставил кутузувскую, там вакансии есть)
-      text: 'react', //фраза для поиска
+      text: '', //фраза для поиска
       isLoad: false,
       isLoadData: false,
       error: '',
@@ -21,11 +21,11 @@ export default class App extends Component {
 
   onFindJobs = () => {
     this.setState({ isLoadData: false });
-    const perPage = 'per_page=50' //количество вакансий на странице
+    const perPage = 'per_page=100'; //количество вакансий на странице (ограничение 100)
     const metro = +this.state.metroStationId ? 'metro='+this.state.metroStationId : '';
     const text = 'text='+this.state.text.split(' ').join('+');
-    const addUrl = [perPage, metro, text].join('&')
-    const baseUrl = 'https://api.hh.ru/vacancies?'+addUrl;
+    const addUrl = [perPage, metro, text].join('&');
+    const baseUrl = 'https://api.hh.ru/vacancies?area=1&'+addUrl;
     fetch(`${baseUrl}`)
       .then(response => {
         if (response.ok) {
@@ -50,7 +50,7 @@ export default class App extends Component {
         }
       })
       .then(metro => this.setState({ metro: metro.lines, isLoad: true }))
-      .catch(error => this.setState({ error, isLoad: false }));
+      .catch(error => this.setState({ error, isLoad: true }));
   }
 
   render() {
@@ -82,7 +82,7 @@ export default class App extends Component {
           </Button>
       </div>
 
-      <div className="row">
+      <div className="my-5" style={{width: "100%"}}>
         { isLoadData ?
             (
               <Map data={data}/>

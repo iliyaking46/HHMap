@@ -1,5 +1,5 @@
 import React from 'react';
-import { YMaps, Map, Placemark } from 'react-yandex-maps';
+import { YMaps, Map, ObjectManager, Button } from 'react-yandex-maps';
   // import placemarks from './placemark.json';
 
 export const yaMap = ({data}) => {
@@ -12,15 +12,26 @@ export const yaMap = ({data}) => {
   .map(item => {
     return (
       {
+        type: "Feature",
+        id: item.id,
         geometry: {
+          type: "Point",
           coordinates: [item.address.lat, item.address.lng]
         },
-        properties: {
-          balloonContent: "<a href="+item.alternate_url+" target=_blank>"+item.name+"</a>"
+        // properties: {
+        //   iconCaption: item.name,
+        //   balloonContent: "<a href="+item.alternate_url+" target=_blank>"+item.name+"</a>"
+        // },
+        properties:{
+          balloonContentHeader: item.name,
+          balloonContentBody:"<a href="+item.alternate_url+" target=_blank>"+item.name+"</a>",
+          balloonContentFooter:(item.salary != null && item.salary.from != null &&  "от "+item.salary.from ) || "з/п не указана" ,
+          clusterCaption: item.name,
+          hintContent: item.name
         },
         options: {
-          preset: "islands#icon",
-          iconColor: "#0095b6"
+          preset: "islands#blueCircleDotIconWithCaption",
+          iconCaptionMaxWidth: "100"
         }
       }
     )
@@ -30,65 +41,31 @@ export const yaMap = ({data}) => {
 
   return (
     <YMaps>
-    <Map state={mapState}>
-      {/* Creating a geo object with the "Point" geometry type. */}
-
-      {ymapData.map((data, i) => {
-        return(
-          <Placemark
-          key={i}
-          {...data}
-          />
-        )
-      })}
-
-      {/* <GeoObject
-        // The geometry description.
-        geometry={{
-          type: 'Point',
-          coordinates: [55.670696, 37.47421],
-        }}
-        // Properties.
-        properties={{
-          // The placemark content.
-          iconContent: 'Я тащусь',
-          hintContent: 'Ну давай уже тащи',
-        }}
-        // Options.
-        options={{
-          // The placemark's icon will stretch to fit its contents.
-          preset: 'islands#blackStretchyIcon',
-          // The placemark can be moved.
-          draggable: true,
-        }}
-      />
-
-      <GeoObject
-        // The geometry description.
-        geometry={{
-          type: 'Point',
-          coordinates: [55.6, 37.6],
-        }}
-        // Properties.
-        properties={{
-          // The placemark content.
-          iconContent: 'Я тащусь',
-          hintContent: 'Ну давай уже тащи',
-        }}
-        // Options.
-        options={{
-          // The placemark's icon will stretch to fit its contents.
-          preset: 'islands#blackStretchyIcon',
-          // The placemark can be moved.
-          draggable: true,
-        }}
-      /> */}
-
-      {/* {placemarks.map((placemarkParams, i) =>
-        <Placemark key={i} {...placemarkParams} />
-      )} */}
-    </Map>
-  </YMaps>
+      <Map state={mapState} width={'100%'} height={500}>
+        <Button data={{ content: "Количество ваканский на карте " + ymapData.length }} options={{ float: 'right', maxWidth: '100%' }} />
+        <ObjectManager
+          options={{
+            clusterize: true,
+            gridSize: 32,
+          }}
+          objects={{
+            preset: 'islands#blueDotIcon',
+          }}
+          clusters={{
+            preset: 'islands#blueClusterIcons',
+          }}
+          features={ymapData}
+        />
+        {/* {ymapData.map((data, i) => {
+          return(
+            <Placemark
+            key={i}
+            {...data}
+            />
+          )
+        })} */}
+      </Map>
+    </YMaps>
   )
 }
 

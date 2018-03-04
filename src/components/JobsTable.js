@@ -2,13 +2,11 @@ import React from 'react';
 
 export const JobsTable = (props) => {
   const { data } = props;
-  const items = [].slice.call(data.items)
-  console.log(data);
-  console.log(data.items);
+  const items = data.items
   
   return (
     <div className="mt-3" >
-      <h2 className="text-center" >Найдено {data.found} вакансий (макс. 10)</h2>
+      <h2 className="text-center" >Найдено {data.found} вакансий, отображено ({data.per_page})</h2>
       <table className="table table-bordered">
         <thead>
           <tr className="thead-light">
