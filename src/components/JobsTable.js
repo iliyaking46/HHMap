@@ -2,7 +2,7 @@ import React from 'react';
 
 export const JobsTable = (props) => {
   const { data } = props;
-  const items = data.items
+  const items = data;
   
   return (
     <div className="mt-3" >

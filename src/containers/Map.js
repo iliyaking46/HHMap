@@ -5,7 +5,7 @@ import { YMaps, Map, ObjectManager, Button } from 'react-yandex-maps';
 export const yaMap = ({data}) => {
 
   const mapState = { center: [55.76, 37.64], zoom: 10 };
-  const ymapData = data.items
+  const ymapData = data
   .filter( item => {
     return item.address != null && item.address.lat != null && item.address.lng != null
   })
@@ -23,8 +23,8 @@ export const yaMap = ({data}) => {
         //   balloonContent: "<a href="+item.alternate_url+" target=_blank>"+item.name+"</a>"
         // },
         properties:{
-          balloonContentHeader: item.name,
-          balloonContentBody:"<a href="+item.alternate_url+" target=_blank>"+item.name+"</a>",
+          balloonContentHeader: `<a href=${item.alternate_url} target=_blank>${item.name}</a>`,
+          balloonContentBody: item.employer.name,
           balloonContentFooter:(item.salary != null && item.salary.from != null &&  "от "+item.salary.from ) || "з/п не указана" ,
           clusterCaption: item.name,
           hintContent: item.name
