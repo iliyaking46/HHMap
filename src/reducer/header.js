@@ -1,7 +1,7 @@
 import { LOAD_METRO, CHANGE_SELECTION, CHANGE_SEARCHTEXT, START, SUCCESS, FAIL } from '../constants'
 
 const initialState = {
-  searchText: '',
+  searchText: 'React',
   metroId: '',
   metro: [],
   isLoad: false

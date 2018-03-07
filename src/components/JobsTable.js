@@ -2,11 +2,10 @@ import React from 'react';
 
 export const JobsTable = (props) => {
   const { data } = props;
-  const items = data;
   
   return (
     <div className="mt-3" >
-      <h2 className="text-center" >Найдено {data.found} вакансий, отображено ({data.per_page})</h2>
+      <h2 className="text-center" >Найдено {data.length} вакансий</h2>
       <table className="table table-bordered">
         <thead>
           <tr className="thead-light">
@@ -20,7 +19,7 @@ export const JobsTable = (props) => {
         </thead>
         <tbody>
           {
-            items.map(item => {
+            data.map(item => {
               return (
                 <tr key={item.id}>
                   <td>{item.name}</td>

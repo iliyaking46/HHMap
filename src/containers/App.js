@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-// import JobsTable from '../components/JobsTable';
+import JobsTable from '../components/JobsTable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import Header from './Header'
 import Map from './Map'
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 import * as headerActions from '../actions/header'
 import { loadData } from '../actions/main'
@@ -15,44 +16,34 @@ class App extends Component {
 
   render() {
     const { data, isLoadData } = this.props.app;
-    const isLoad = this.props.header.isLoad;
-
-    if (!isLoad) return <div className="indicator">
-      <svg width="16px" height="12px">
-        <polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
-        <polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
-      </svg>
-    </div>
+    const loader = <div className="indicator"><svg width="16px" height="12px"><polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline><polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline></svg></div>;
+    
+    const home = () => data.length > 0 && isLoadData ? (
+      <JobsTable data={data} />
+    ) : (
+        data.length === 0 && isLoadData ? (
+          <div><h3 className="text-center">Найдено 0 вакансий, выполните новый запрос</h3></div>
+        ) : (
+            loader
+          )
+      )
 
     return (
-      <div className="container mt-5">
-        <h1 className="text-center" >HH Map Jobs-Finder</h1>
-        <Header header={this.props.header} action={this.props.headerActions} loadData={this.props.loadData} />
-
-        <div className="my-5" style={{ width: "100%" }}>
-          {isLoadData ?
-            (
-              <Map data={data} />
-            ) : (
-              <div className="indicator">
-                <svg width="16px" height="12px">
-                  <polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
-                  <polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
-                </svg>
-              </div>
-            )
-          }
+      <Router>
+        <div className="container mt-5">
+          <h1 className="text-center" >HH Map Jobs-Finder</h1>
+          <Header header={this.props.header} action={this.props.headerActions} loadData={this.props.loadData} />
+          <nav className="nav">
+            <Link className="nav-link" to="/">К вакансиям</Link>
+            <Link className="nav-link" to="/map">На карте</Link>
+            {/* <Link to="/topics">Topics</Link> */}
+          </nav>
+          <Route exact path="/" component={home} />
+          <Route path="/map" component={() => <Map data={data} />} />
+          {/* <Route path="/topics" component={Topics} /> */}
         </div>
-        {/* <div className="row justify-content-center">
-        { isLoadData ?
-          (
-            <JobsTable data={data}/>
-          ) : (
-            <div>Data is loading...</div>
-          )
-        }
-      </div> */}
-      </div>
+      </Router>
+
     )
   }
 }
