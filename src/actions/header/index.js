@@ -1,12 +1,12 @@
 import {LOAD_METRO, CHANGE_SELECTION, CHANGE_SEARCHTEXT, START, SUCCESS, FAIL
-} from '../constants'
+} from '../../constants'
 
 export function loadMetro() {
   return (dispatch) => {
     
     dispatch({
         type: LOAD_METRO + START,
-        payload: false
+        payload: {isLoad: false}
     })
 
     const metroUrl = 'https://api.hh.ru/metro/1'

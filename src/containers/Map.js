@@ -1,6 +1,5 @@
 import React from 'react';
 import { YMaps, Map, ObjectManager, Button } from 'react-yandex-maps';
-  // import placemarks from './placemark.json';
 
 export const yaMap = ({data}) => {
 
@@ -18,10 +17,6 @@ export const yaMap = ({data}) => {
           type: "Point",
           coordinates: [item.address.lat, item.address.lng]
         },
-        // properties: {
-        //   iconCaption: item.name,
-        //   balloonContent: "<a href="+item.alternate_url+" target=_blank>"+item.name+"</a>"
-        // },
         properties:{
           balloonContentHeader: `<a href=${item.alternate_url} target=_blank>${item.name}</a>`,
           balloonContentBody: item.employer.name,
@@ -37,8 +32,6 @@ export const yaMap = ({data}) => {
     )
   })
 
-  console.log(ymapData);
-
   return (
     <YMaps>
       <Map state={mapState} width={'100%'} height={500}>
@@ -46,7 +39,7 @@ export const yaMap = ({data}) => {
         <ObjectManager
           options={{
             clusterize: true,
-            gridSize: 32,
+            gridSize: 80,
           }}
           objects={{
             preset: 'islands#blueDotIcon',

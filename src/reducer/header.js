@@ -1,7 +1,7 @@
 import { LOAD_METRO, CHANGE_SELECTION, CHANGE_SEARCHTEXT, START, SUCCESS, FAIL } from '../constants'
 
 const initialState = {
-  searchText: undefined,
+  searchText: 'react',
   metroId: '',
   metro: [],
   isLoad: false
@@ -13,10 +13,11 @@ export default (state = initialState, action) => {
 
   switch (type) {
       case LOAD_METRO + START:
-          return {...state}
+          return {...state, isLoad: payload.isLoad}
 
       case LOAD_METRO + SUCCESS:
-          return {...state, metroId: payload.metro[0].id, metro: payload.metro, isLoad: payload.isLoad}
+        //   return {...state, metroId: payload.metro[0].id, metro: payload.metro, isLoad: payload.isLoad}
+          return {...state, metro: payload.metro, isLoad: payload.isLoad}
 
       case LOAD_METRO + FAIL:
           return {...state, isLoad: false}

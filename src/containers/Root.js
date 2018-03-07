@@ -1,6 +1,6 @@
 import React from 'react'
 import {Provider} from 'react-redux'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import App from './App'
 import store from '../store'
 
@@ -12,7 +12,7 @@ function Root() {
     )
 }
 
-Root.propTypes = {
-}
+// Root.propTypes = {
+// }
 
 export default Root

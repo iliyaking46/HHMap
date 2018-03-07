@@ -1,22 +1,20 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import Select from 'react-select'
 import TextBox from '../components/TextBox';
 import Button from '../components/Button';
 
 import 'react-select/dist/react-select.css'
 
-import { loadMetro, changeSelection, changeTextSearch } from '../AC'
 
+export default class Header extends Component {
 
-class HeaderApp extends Component {
+  // componentDidMount() {
+  //   this.props.action.loadMetro();
+  // }
 
-  componentDidMount() {
-    this.props.loadMetro()
-  }
   render () {
+    const { searchText, metroId, metro } = this.props.header;
 
-    const { searchText, metroId, metro, isLoad } = this.props.searchField;
     const stations = metro.map(line => 
         [{label: line.name,value: line.id}, ...line.stations.map(station => (
           {
@@ -32,25 +30,24 @@ class HeaderApp extends Component {
             <Select
               options={stations}
               value={metroId}
-              multi={false}
-              onChange={selected => this.props.changeSelection(selected)}
+              simpleValue={true}
+              placeholder={'Выберите станцию'}
+              noResultsText={'Ты где такие станции нашел?'} 
+              onChange={selected =>this.props.action.changeSelection(selected) }
             />
           </div>
           <div className="col">
             <TextBox
-              onChange={text => this.props.changeTextSearch(text)}
+              onChange={text => this.props.action.changeTextSearch(text)}
               value={searchText}
             />
           </div>
           <Button
-            onClick={() => console.log(metroId, searchText)}
+            onClick={() => this.props.loadData(metroId, searchText)}
           >
-          Загрузить станции
+          Поиск
           </Button> 
         </div>
     )
   }
 }
-export default connect(state => ({
-  searchField: state.search,
-}), { loadMetro, changeSelection, changeTextSearch })(HeaderApp)

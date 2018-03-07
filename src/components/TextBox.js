@@ -5,8 +5,9 @@ export const TextBox = (props) => {
   const value = props.value || '';
   return (
     <input
+      autoFocus
       className="form-control"
-      placeholder="Enter value"
+      placeholder="Введите значение"
       type="text"
       value={value}
       onChange={e => onChange(e.target.value)}

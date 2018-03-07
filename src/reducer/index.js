@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux';
-import search from './search';
+import app from './app';
+import header from './header';
 
 export default combineReducers({
-  search,
+  app, header,
 })
