@@ -68,8 +68,6 @@ export function loadData(metroId, textSearch) {
     const baseUrl = `https://api.hh.ru/vacancies?area=1&per_page=100&${addUrl}`;
     console.log(baseUrl);
 
-    let pagesRequired = 0;
-
     fetch(`${baseUrl}`)
       .then(resp => {
         if (resp.ok) {
@@ -81,8 +79,8 @@ export function loadData(metroId, textSearch) {
       .then(resp => {
         console.log(resp.pages);
         const apiPromises = [];
-        pagesRequired = resp.pages;
-        for (let i = pagesRequired; i > 0; i--) { apiPromises.push(fetch(`${baseUrl}&page=${i}`).then(resp => resp.json().then(resp => resp.errors ? [] : resp.items))) }
+        const pages = resp.pages;
+        for (let i = 0; i < pages; i++) { apiPromises.push(fetch(`${baseUrl}&page=${i}`).then(resp => resp.json().then(resp => resp.errors ? [] : resp.items))) }
         Promise.all(apiPromises).then(data => dispatch({
           type: LOAD_DATA + SUCCESS,
           payload: { data: data.reverse().reduce((newArr, nextArr) => [...newArr, ...nextArr], []), isLoadData: true }

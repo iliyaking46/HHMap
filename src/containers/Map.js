@@ -39,7 +39,7 @@ export const yaMap = ({data}) => {
         <ObjectManager
           options={{
             clusterize: true,
-            gridSize: 80,
+            gridSize: 120,
           }}
           objects={{
             preset: 'islands#blueDotIcon',

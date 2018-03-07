@@ -1,8 +1,7 @@
 import React from 'react';
 
 export const TextBox = (props) => {
-  const onChange = props.onChange;
-  const value = props.value || '';
+  const { onChange, onKeyDown, value='' } = props;
   return (
     <input
       autoFocus
@@ -10,6 +9,7 @@ export const TextBox = (props) => {
       placeholder="Введите значение"
       type="text"
       value={value}
+      onKeyDown={e => onKeyDown(e.key === 'Enter')}
       onChange={e => onChange(e.target.value)}
     />
   );

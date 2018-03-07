@@ -9,13 +9,6 @@ import * as headerActions from '../actions/header'
 import { loadData } from '../actions/main'
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      dataMap: []
-    }
-  }
-
   componentDidMount() {
     this.props.headerActions.loadMetro();
   }
