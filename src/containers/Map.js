@@ -1,5 +1,6 @@
 import React from 'react';
 import { YMaps, Map, ObjectManager, Button } from 'react-yandex-maps';
+import { Link } from "react-router-dom";
 
 export const yaMap = ({data}) => {
 
@@ -18,7 +19,7 @@ export const yaMap = ({data}) => {
           coordinates: [item.address.lat, item.address.lng]
         },
         properties:{
-          balloonContentHeader: `<a href=${item.alternate_url} target=_blank>${item.name}</a>`,
+          balloonContentHeader: `<a href=vacancies/${item.id}>${item.name}</a>`,
           balloonContentBody: item.employer.name,
           balloonContentFooter:(item.salary != null && item.salary.from != null &&  "от "+item.salary.from ) || "з/п не указана" ,
           clusterCaption: item.name,
