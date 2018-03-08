@@ -7,7 +7,6 @@ const initialState = {
   isLoad: false
 }
 
-
 export default (state = initialState, action) => {
   const { type, payload } = action
 
@@ -16,8 +15,7 @@ export default (state = initialState, action) => {
           return {...state, isLoad: payload.isLoad}
 
       case LOAD_METRO + SUCCESS:
-        //   return {...state, metroId: payload.metro[0].id, metro: payload.metro, isLoad: payload.isLoad}
-          return {...state, metro: payload.metro, isLoad: payload.isLoad}
+          return {...state, metroId: payload.metro[3].id, metro: payload.metro, isLoad: payload.isLoad}
 
       case LOAD_METRO + FAIL:
           return {...state, isLoad: false}
