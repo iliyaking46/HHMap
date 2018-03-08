@@ -8,6 +8,7 @@ export default class MovieCardPage extends React.PureComponent {
     super(props);
     this.state = {
       vacancy: undefined,
+      loaded: false
     }
     fetch(`https://api.hh.ru/vacancies/${props.match.params.id}`)
       .then(response => response.json())
@@ -15,9 +16,10 @@ export default class MovieCardPage extends React.PureComponent {
   }
 
   render() {
-    const { vacancy } = this.state;
+    const { vacancy, loaded } = this.state;
+    const loader = <div className="indicator"><svg width="16px" height="12px"><polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline><polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline></svg></div>;
     if (!vacancy) {
-      return null;
+      return loader;
     }
     return <div className="mb-5">
         <h1>{vacancy.name}</h1>
@@ -27,7 +29,7 @@ export default class MovieCardPage extends React.PureComponent {
         </p>
         <p>{vacancy.name}</p>
         <p dangerouslySetInnerHTML={{ __html: `${vacancy.description}` }} />
-        <Map data={[vacancy]}/>
+        {vacancy.address && <Map data={[vacancy]}/>}
     </div>
   }
 }
