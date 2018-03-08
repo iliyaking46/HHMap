@@ -16,16 +16,16 @@ export default class MovieCardPage extends React.PureComponent {
 
   render() {
     const { vacancy } = this.state;
-    console.log(this.state);
-
     if (!vacancy) {
       return null;
     }
-    return <div>
+    return <div className="mb-5">
         <h1>{vacancy.name}</h1>
-        <img src={vacancy.employer.logo_urls && vacancy.employer.logo_urls.original} style={{maxWidth: '200px'}} alt={vacancy.name} />
+        {vacancy.employer.logo_urls && <img src={vacancy.employer.logo_urls.original} style={{maxWidth: '200px'}} alt={vacancy.name} />}
+        <p>
+          {vacancy.key_skills.map(skill => <span key={skill.name} className="badge badge-success mr-2">{skill.name}</span> )}
+        </p>
         <p>{vacancy.name}</p>
-        {/* <p dangerouslySetInnerHTML={() => {return {__html: vacancy.description}}} /> */}
         <p dangerouslySetInnerHTML={{ __html: `${vacancy.description}` }} />
         <Map data={[vacancy]}/>
     </div>

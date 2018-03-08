@@ -13,7 +13,6 @@ export const JobsTable = ({ data }) => {
             <th>Зарплата от</th>
             <th>Зарплата до</th>
             <th>Создана</th>
-            <th>Ссылка</th>
           </tr>
         </thead>
         <tbody>
@@ -33,7 +32,7 @@ export const JobsTable = ({ data }) => {
                   <td>
                     {
                       (item.salary != null && item.salary.to != null &&
-                      `до +${item.salary.to} ${item.salary.currency}`) || 
+                      `до ${item.salary.to} ${item.salary.currency}`) || 
                       'не указана'
                     }
                   </td>

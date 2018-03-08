@@ -30,7 +30,7 @@ class App extends Component {
           <Header />
           <nav className="nav">
             <Link className="nav-link" to="/">К вакансиям</Link>
-            <Link className="nav-link" to="/map">На карте</Link>
+            {data.length === 0 ? <span className="nav-link disabled" href="">На карте</span>  : <Link className="nav-link" to="/map">На карте</Link>  }
             {/* <Link to="/topics">Topics</Link> */}
           </nav>
           <Route exact path="/" component={home} />

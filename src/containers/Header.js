@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select'
 import TextBox from '../components/TextBox';
-import Button from '../components/Button';
+// import Button from '../components/Button';
+import { Link } from "react-router-dom";
 
 import 'react-select/dist/react-select.css'
 import * as headerActions from '../actions/header'
@@ -49,11 +50,12 @@ class Header extends Component {
               value={searchText}
             />
           </div>
-          <Button
+          <Link to="/" className="btn btn-primary mx-3" onClick={() => this.props.loadData(metroId, searchText)}>Поиск</Link>
+          {/* <Button
             onClick={() => this.props.loadData(metroId, searchText)}
           >
             Поиск
-          </Button>
+          </Button> */}
         </div>
 
     )
