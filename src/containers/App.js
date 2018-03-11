@@ -8,11 +8,11 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 class App extends Component {
   render() {
-    const { data, isLoadData } = this.props.app;
+    const { data, isLoadData, paramOfData } = this.props.app;
     const loader = <div className="indicator"><svg width="16px" height="12px"><polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline><polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline></svg></div>;
     
     const home = () => data.length > 0 && isLoadData ? (
-      <JobsTable data={data} />
+      <JobsTable data={data} paramOfData={paramOfData} />
     ) : (
         data.length === 0 && isLoadData ? (
           <div><h3 className="text-center">Найдено 0 вакансий, выполните новый запрос</h3></div>

@@ -13,15 +13,15 @@ import { loadData } from '../actions/main'
 class Header extends Component {
 
   componentDidMount() {
-    console.log(this.props);
+//    console.log(this.props);
     this.props.loadMetro();
   }
 
-  handleSubmit = (e, metroId, searchText) => this.props.loadData(metroId, searchText)
+ // handleSubmit = (e, metroId, searchText) => this.props.loadData(metroId, searchText) // Оно не используется
 
   render() {
     const { searchText, metroId, metro } = this.props.header;
-    
+    const paging = 0;
     const stations = metro.map(line =>
       [{ label: line.name, value: line.id }, ...line.stations.map(station => (
         {
@@ -46,11 +46,11 @@ class Header extends Component {
           <div className="col">
             <TextBox
               onChange={text => this.props.changeTextSearch(text)}
-              onKeyDown={enter => enter && this.props.loadData(metroId, searchText)}
+              onKeyDown={enter => enter && this.props.loadData(metroId, searchText, paging)} // 49-я и 53-я строки делают одно и тоже
               value={searchText}
             />
           </div>
-          <Link to="/" className="btn btn-primary mx-3" onClick={() => this.props.loadData(metroId, searchText)}>Поиск</Link>
+          <Link to="/" className="btn btn-primary mx-3" onClick={() => this.props.loadData(metroId, searchText, paging)}>Поиск</Link>
           {/* <Button
             onClick={() => this.props.loadData(metroId, searchText)}
           >
