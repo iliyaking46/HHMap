@@ -3,11 +3,14 @@ import { Link } from "react-router-dom";
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { loadPage } from '../actions/main'
-
-// export const JobsTable = ({ data, paramOfData }) => {
+import { loadData, loadPage } from '../actions/table'
 
 class JobsTable extends Component {
+  componentDidMount() {
+    const { searchText, searchMetroId } = this.props.app
+    this.props.loadData(searchText, searchMetroId);
+  }
+
   paginFunc = () => {
     const { paramOfData } = this.props.table;
     const { loadPage } = this.props;
@@ -82,7 +85,7 @@ class JobsTable extends Component {
         </table>
         <div>
           {
-            this.paginFunc()
+            // this.paginFunc()
           }
         </div>
       </div>
@@ -90,8 +93,7 @@ class JobsTable extends Component {
   }
 }
 
-// export default JobsTable;
-
 export default connect(state => ({
-  table: state.app,
-}), { loadPage })(JobsTable)
+  table: state.table,
+  app: state.app
+}), { loadData, loadPage })(JobsTable)

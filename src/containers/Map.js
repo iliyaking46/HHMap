@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { YMaps, Map, ObjectManager, Button } from 'react-yandex-maps';
 
 class yaMap extends React.Component {
@@ -6,7 +7,8 @@ class yaMap extends React.Component {
     super(props);
     this.state = {
       mapState: { center: [55.76, 37.64], zoom: 10, controls: [] },
-      data: props.data,
+      data: props.app.data,
+      data: [],
     }
   }
   onLoadMap = (event) => {
@@ -70,4 +72,6 @@ class yaMap extends React.Component {
     )
   }
 }
-export default yaMap 
+export default connect(state => ({
+  app: state.app,
+}))(yaMap)
