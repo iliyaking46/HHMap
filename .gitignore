@@ -15,8 +15,8 @@
 .env.development.local
 .env.test.local
 .env.production.local
-.idea
-.vscode
+.idea/
+.vscode/
 package-lock.json
 yarn.lock
 
