@@ -1,5 +1,5 @@
 import {
-  LOAD_DATA,
+  LOAD_TABLE_DATA,
   START,
   SUCCESS,
   FAIL
@@ -12,25 +12,29 @@ const initialState = {
     found: '',
     page: 0,
     pages: 0,
-    address: ''
+    address: '',
+    searchText: '',
+    searchMetroId: '',
   }
 }
 
-
 export default (state = initialState, { type, payload }) => {
   switch (type) {
-    case LOAD_DATA + START:
+    case LOAD_TABLE_DATA + START:
       return { ...state, data: payload.data, isLoadData: payload.isLoadData }
 
-    case LOAD_DATA + SUCCESS:
-      let xc = {}
-      xc.found = payload.paramOfData.found
-      xc.page = payload.paramOfData.page + 1
-      xc.pages = payload.paramOfData.pages
-      xc.address = payload.paramOfData.address
-      return { data: [...state.data, ...payload.data], isLoadData: payload.isLoadData, paramOfData: xc }
+    case LOAD_TABLE_DATA + SUCCESS:
+      const params = {
+        found: payload.paramOfData.found,
+        page: payload.paramOfData.page + 1,
+        pages: payload.paramOfData.pages,
+        address: payload.paramOfData.address,
+        searchText: payload.paramOfData.searchText,
+        searchMetroId: payload.paramOfData.searchMetroId
+      }
+      return { data: [...state.data, ...payload.data], isLoadData: payload.isLoadData, paramOfData: params }
 
-    case LOAD_DATA + FAIL:
+    case LOAD_TABLE_DATA + FAIL:
       return { ...state, isLoad: false, paramOfData: 0 }
 
     default: return state;

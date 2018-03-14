@@ -7,17 +7,8 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 export default class App extends Component {
   render() {
-    const loader = <div className="indicator"><svg width="16px" height="12px"><polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline><polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline></svg></div>;
+    // const loader = <div className="indicator"><svg width="16px" height="12px"><polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline><polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline></svg></div>;
     const home = () => <JobsTable /> 
-    // (
-    //   <JobsTable />
-    // ) : (
-    //     data.length === 0 && isLoadData ? (
-    //       <div><h3 className="text-center">Найдено 0 вакансий, выполните новый запрос</h3></div>
-    //     ) : (
-    //         loader
-    //       )
-    //   )
     const map = () => <Map />;
 
     return (
@@ -31,7 +22,7 @@ export default class App extends Component {
           </nav>
           <Route exact path="/vacancies" component={home} />
           <Route path="/map" component={map} />
-          {/* <Route path="/vacancies/:id" component={VacancyPage} /> */}
+          <Route path="/vacancies/:id" component={VacancyPage} />
         </div>
       </Router>
     )

@@ -1,26 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { YMaps, Map, ObjectManager, Button } from 'react-yandex-maps';
+import { loadMapData } from '../actions/map'
 
 class yaMap extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      mapState: { center: [55.76, 37.64], zoom: 10, controls: [] },
-      data: props.app.data,
-      data: [],
-    }
+  componentDidMount() {
+    const { searchText, searchMetroId } = this.props.app
+    this.props.loadMapData(searchText, searchMetroId);
   }
+
   onLoadMap = (event) => {
     const coords = event.originalEvent.map.getBounds();
-    const url = `https://api.hh.ru/vacancies?area=1&per_page=100&clusters=true&label=with_address&top_lat=${coords[1][0]}&bottom_lat=${coords[0][0]}&left_lng=${coords[0][1]}&right_lng=${coords[1][1]}`
-    console.log(url);
-    fetch(url)
-      .then(response => response.json())
-      .then(response => this.setState({ data: response.items }))
+    const { searchText, searchMetroId } = this.props.app
+    this.props.loadMapData(searchText, searchMetroId, coords);
   }
   render() {
-    const { data, mapState } = this.state;
+    const { data, mapState } = this.props.map;
     const ymapData = data
       .filter(item => {
         return item.address != null && item.address.lat != null && item.address.lng != null
@@ -74,4 +69,5 @@ class yaMap extends React.Component {
 }
 export default connect(state => ({
   app: state.app,
-}))(yaMap)
+  map: state.ymap
+}), { loadMapData })(yaMap)

@@ -1,7 +1,8 @@
 export const ADD_GLOBAL_DATA = 'ADD_GLOBAL_DATA'
 
 export const LOAD_METRO = 'LOAD_METRO'
-export const LOAD_DATA = 'LOAD_DATA'
+export const LOAD_TABLE_DATA = 'LOAD_TABLE_DATA'
+export const LOAD_MAP_DATA = 'LOAD_MAP_DATA'
 
 export const CHANGE_SELECTION = 'CHANGE_SELECTION'
 export const CHANGE_SEARCHTEXT = 'CHANGE_SEARCHTEXT'

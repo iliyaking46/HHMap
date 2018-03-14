@@ -7,14 +7,17 @@ import { loadData, loadPage } from '../actions/table'
 
 class JobsTable extends Component {
   componentDidMount() {
-    const { searchText, searchMetroId } = this.props.app
-    this.props.loadData(searchText, searchMetroId);
+    const { searchText, searchMetroId } = this.props.app;
+    if (searchText !== this.props.table.paramOfData.searchText || searchMetroId !== this.props.table.paramOfData.searchMetroId) {
+      this.props.loadData(searchText, searchMetroId);
+    }
   }
 
   paginFunc = () => {
+    console.log(this.props.table);
     const { paramOfData } = this.props.table;
     const { loadPage } = this.props;
-    if (paramOfData.pages === 1) return null;
+    if (paramOfData.found === 0 || paramOfData.pages === 1) return null;
     switch (paramOfData.page) {
       case 1:
         return (<ul className="pagination justify-content-center">
@@ -85,7 +88,7 @@ class JobsTable extends Component {
         </table>
         <div>
           {
-            // this.paginFunc()
+            this.paginFunc()
           }
         </div>
       </div>
