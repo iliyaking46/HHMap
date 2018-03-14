@@ -1,35 +1,24 @@
-import React, { Component } from 'react';
+import React from 'react';
 import JobsTable from './JobsTable';
-import { connect } from 'react-redux';
 import Header from './Header'
 import Map from './Map'
 import VacancyPage from './VacancyPage'
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Router, Route, Link } from "react-router-dom";
+import createHistory from "history/createBrowserHistory"
+const history = createHistory()
 
-class App extends Component {
+export default class App extends React.Component {
   render() {
-    const { data, isLoadData } = this.props.app;
-    const loader = <div className="indicator"><svg width="16px" height="12px"><polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline><polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline></svg></div>;
-
-    const home = () => data.length > 0 && isLoadData ? (
-      <JobsTable />
-    ) : (
-        data.length === 0 && isLoadData ? (
-          <div><h3 className="text-center">Найдено 0 вакансий, выполните новый запрос</h3></div>
-        ) : (
-            loader
-          )
-      )
-    const map = () => isLoadData ? <Map data={data} /> : loader;
-
+    const home = () => <JobsTable /> 
+    const map = () => <Map history={history}/>;
     return (
-      <Router>
+      <Router history={history}>
         <div className="container mt-5">
           <h1 className="text-center" >HH Map Jobs-Finder</h1>
-          <Header />
+          <Header history={history} />
           <nav className="nav">
             <Link className="nav-link" to="/">К вакансиям</Link>
-            {data.length === 0 ? <span className="nav-link disabled" href="">На карте</span> : <Link className="nav-link" to="/map">На карте</Link>}
+            <Link className="nav-link" to="/map">На карте</Link>
           </nav>
           <Route exact path="/" component={home} />
           <Route path="/map" component={map} />
@@ -39,8 +28,3 @@ class App extends Component {
     )
   }
 }
-
-export default connect(state => ({
-  app: state.app,
-}))(App)
-

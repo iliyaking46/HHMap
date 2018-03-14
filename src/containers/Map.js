@@ -1,24 +1,26 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { YMaps, Map, ObjectManager, Button } from 'react-yandex-maps';
+// import { loader } from '../helpers'
+
+import { loadMapData } from '../actions/map'
+import { changePage } from '../actions/main'
 
 class yaMap extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      mapState: { center: [55.76, 37.64], zoom: 10, controls: [] },
-      data: props.data,
-    }
+  componentDidMount() {
+    this.props.changePage('map');    
+    const { searchText, searchMetroId } = this.props.app
+    this.props.loadMapData(searchText, searchMetroId);
   }
+
   onLoadMap = (event) => {
     const coords = event.originalEvent.map.getBounds();
-    const url = `https://api.hh.ru/vacancies?area=1&per_page=100&clusters=true&label=with_address&top_lat=${coords[1][0]}&bottom_lat=${coords[0][0]}&left_lng=${coords[0][1]}&right_lng=${coords[1][1]}`
-    console.log(url);
-    fetch(url)
-      .then(response => response.json())
-      .then(response => this.setState({ data: response.items }))
+    const { searchText, searchMetroId } = this.props.app
+    this.props.loadMapData(searchText, searchMetroId, coords);
   }
+  
   render() {
-    const { data, mapState } = this.state;
+    const { data, mapState } = this.props.map;
     const ymapData = data
       .filter(item => {
         return item.address != null && item.address.lat != null && item.address.lng != null
@@ -33,9 +35,9 @@ class yaMap extends React.Component {
               coordinates: [item.address.lat, item.address.lng]
             },
             properties: {
-              balloonContentHeader: item.name,
-              balloonContentBody: item.employer.name,
-              balloonContentFooter: (item.salary != null && item.salary.from != null && "от " + item.salary.from) || "з/п не указана",
+              balloonContentHeader: `<a href=/vacancies/${item.id} target=_blank>${item.name}</a>`,
+              balloonContentBody: `${item.employer.name}<br><br><a href=/vacancies/${item.id} target=_blank>Подробнее</a>`,
+              balloonContentFooter: (item.salary != null && (item.salary.from != null && "от " + item.salary.from)) || "з/п не указана",
               clusterCaption: item.name,
               hintContent: item.name
             },
@@ -70,4 +72,7 @@ class yaMap extends React.Component {
     )
   }
 }
-export default yaMap 
+export default connect(state => ({
+  app: state.app,
+  map: state.ymap
+}), { loadMapData, changePage })(yaMap)

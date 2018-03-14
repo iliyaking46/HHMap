@@ -2,25 +2,37 @@
 import { Link } from "react-router-dom";
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-import { loadPage } from '../actions/main'
-
-// export const JobsTable = ({ data, paramOfData }) => {
+import { loader } from '../helpers'
+import { loadData, loadPage } from '../actions/table'
+import { changePage } from '../actions/main'
 
 class JobsTable extends Component {
+  componentDidMount() {
+    this.props.changePage('home');
+
+    // этот код для сверки с текущим состоянием, если есть какая то дата, которая уже была загружена, то не надо грузить еще раз
+    const { searchText, searchMetroId } = this.props.app;
+    if (searchText !== this.props.table.paramOfData.searchText || searchMetroId !== this.props.table.paramOfData.searchMetroId) {
+      this.props.loadData(searchText, searchMetroId);
+    }
+  }
+
   paginFunc = () => {
+    console.log(this.props.table);
     const { paramOfData } = this.props.table;
     const { loadPage } = this.props;
-    if (paramOfData.pages === 1) return null;
+    if (paramOfData.found === 0 || paramOfData.pages === 1) return null;
     switch (paramOfData.page) {
       case 1:
-        return (<ul className="pagination justify-content-center">
+        return (
+        <ul className="pagination justify-content-center">
           <li className="page-item">
             <button className="page-link" onClick={() => loadPage(paramOfData, 0)}>Вперед</button>
           </li>
         </ul>);
       case paramOfData.pages:
-        return (<ul className="pagination justify-content-center">
+        return (
+        <ul className="pagination justify-content-center">
           <li className="page-item">
             <button className="page-link" onClick={() => loadPage(paramOfData, 2)}>Назад</button>
           </li>
@@ -39,9 +51,11 @@ class JobsTable extends Component {
   }
 
   render() {
+    const { data, isLoadData, paramOfData } = this.props.table;
     return (
+      isLoadData ? (
       <div className="mt-3" >
-        <h2 className="text-center" >Найдено {this.props.table.paramOfData.found} вакансий</h2>
+        <h2 className="text-center" >Найдено {paramOfData.found} вакансий</h2>
         <table className="table table-bordered">
           <thead>
             <tr className="thead-light">
@@ -54,7 +68,7 @@ class JobsTable extends Component {
           </thead>
           <tbody>
             {
-              this.props.table.data.map(item => {
+              data.map(item => {
                 return (
                   <tr key={item.id}>
                     <td><Link to={`vacancies/${item.id}`}>{item.name}</Link></td>
@@ -85,13 +99,14 @@ class JobsTable extends Component {
             this.paginFunc()
           }
         </div>
-      </div>
+      </div>) : (
+        loader
+      )
     )
   }
 }
 
-// export default JobsTable;
-
 export default connect(state => ({
-  table: state.app,
-}), { loadPage })(JobsTable)
+  table: state.table,
+  app: state.app
+}), { loadData, loadPage, changePage })(JobsTable)

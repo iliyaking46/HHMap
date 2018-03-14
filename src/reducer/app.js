@@ -1,42 +1,22 @@
-import { 
-  LOAD_DATA, 
-  START, 
-  SUCCESS, 
-  FAIL 
+import {
+  ADD_GLOBAL_DATA,
+  CHANGE_PAGE,
 } from '../constants'
 
 const initialState = {
-  data: [], //вакансии
-  isLoadData: true,
-  paramOfData: {
-      found: '',
-      page: 0,
-      pages: 0,
-      address: ''
-  }
+  searchText: '',
+  searchMetroId: '',
+  currentPage: 'home'
 }
 
-
-export default (state = initialState, action) => {
-  const { type, payload } = action
-
+export default (state = initialState, { type, payload }) => {
   switch (type) {
-      case LOAD_DATA + START:
-          return {data: payload.data, isLoadData: payload.isLoadData, paramOfData: payload.paramOfData}
+    case ADD_GLOBAL_DATA:
+      return { ...state, searchText: payload.searchText, searchMetroId: payload.searchMetroId }
 
-      case LOAD_DATA + SUCCESS:
-      let xc = {}
-         xc.found = payload.paramOfData.found
-         xc.page = payload.paramOfData.page + 1
-         xc.pages = payload.paramOfData.pages            
-         xc.address = payload.paramOfData.address
-        
+    case CHANGE_PAGE:
+      return {...state, currentPage: payload.page}
 
-         return {data: [...state.data, ...payload.data], isLoadData: payload.isLoadData, paramOfData: xc} 
-
-      case LOAD_DATA + FAIL:
-          return {...state, isLoad: false, paramOfData: 0}
-
-      default: return state;
+    default: return state;
   }
 }
