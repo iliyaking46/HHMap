@@ -1,10 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { YMaps, Map, ObjectManager, Button } from 'react-yandex-maps';
+// import { loader } from '../helpers'
+
 import { loadMapData } from '../actions/map'
+import { changePage } from '../actions/main'
 
 class yaMap extends React.Component {
   componentDidMount() {
+    this.props.changePage('map');    
     const { searchText, searchMetroId } = this.props.app
     this.props.loadMapData(searchText, searchMetroId);
   }
@@ -14,6 +18,7 @@ class yaMap extends React.Component {
     const { searchText, searchMetroId } = this.props.app
     this.props.loadMapData(searchText, searchMetroId, coords);
   }
+  
   render() {
     const { data, mapState } = this.props.map;
     const ymapData = data
@@ -30,9 +35,9 @@ class yaMap extends React.Component {
               coordinates: [item.address.lat, item.address.lng]
             },
             properties: {
-              balloonContentHeader: item.name,
-              balloonContentBody: item.employer.name,
-              balloonContentFooter: (item.salary != null && item.salary.from != null && "от " + item.salary.from) || "з/п не указана",
+              balloonContentHeader: `<a href=/vacancies/${item.id} target=_blank>${item.name}</a>`,
+              balloonContentBody: `${item.employer.name}<br><br><a href=/vacancies/${item.id} target=_blank>Подробнее</a>`,
+              balloonContentFooter: (item.salary != null && (item.salary.from != null && "от " + item.salary.from)) || "з/п не указана",
               clusterCaption: item.name,
               hintContent: item.name
             },
@@ -70,4 +75,4 @@ class yaMap extends React.Component {
 export default connect(state => ({
   app: state.app,
   map: state.ymap
-}), { loadMapData })(yaMap)
+}), { loadMapData, changePage })(yaMap)

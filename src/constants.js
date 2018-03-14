@@ -1,4 +1,5 @@
 export const ADD_GLOBAL_DATA = 'ADD_GLOBAL_DATA'
+export const CHANGE_PAGE = 'CHANGE_PAGE'
 
 export const LOAD_METRO = 'LOAD_METRO'
 export const LOAD_TABLE_DATA = 'LOAD_TABLE_DATA'

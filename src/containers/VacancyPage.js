@@ -3,7 +3,7 @@ import Map from './Map'
 
 // import {Map, fromJS} from 'immutable';
 
-export default class MovieCardPage extends React.PureComponent {
+export default class MovieCardPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

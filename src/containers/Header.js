@@ -2,15 +2,28 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select'
 import TextBox from '../components/TextBox';
-import { Link } from "react-router-dom";
-
 import 'react-select/dist/react-select.css'
 import * as headerActions from '../actions/header'
 import { addGlobalData } from '../actions/main'
+import { loadMapData } from '../actions/map'
+import { loadData } from '../actions/table'
 
 class Header extends Component {
   componentDidMount() {
     this.props.loadMetro();
+  }
+
+  searchHandler = () => {
+    const { searchText, metroId } = this.props.header;
+    this.props.addGlobalData(metroId, searchText);
+    this.props.history.push('/');
+    console.log(this.props.page);
+
+    switch (this.props.page) {
+      case 'home': this.props.loadData(searchText, metroId); break;
+      case 'map': this.props.loadMapData(searchText, metroId); break;
+      default: break;
+    }
   }
 
   // handleSubmit = (e, metroId, searchText) => this.props.loadData(metroId, searchText) // Оно не используется
@@ -41,16 +54,11 @@ class Header extends Component {
         <div className="col">
           <TextBox
             onChange={text => this.props.changeTextSearch(text)}
-            onKeyDown={enter => enter && this.props.addGlobalData(metroId, searchText)} // 49-я и 53-я строки делают одно и тоже
+            onKeyDown={enter => enter && this.searchHandler()}
             value={searchText}
           />
         </div>
-        <Link to="/vacancies" className="btn btn-primary mx-3" onClick={() => this.props.addGlobalData(metroId, searchText)}>Поиск</Link>
-        {/* <Button
-            onClick={() => this.props.loadData(metroId, searchText)}
-          >
-            Поиск
-          </Button> */}
+        <button className="btn btn-primary mx-3" onClick={this.searchHandler}>Поиск</button>
       </div>
     )
   }
@@ -58,4 +66,5 @@ class Header extends Component {
 
 export default connect(state => ({
   header: state.header,
-}), { addGlobalData, ...headerActions })(Header)
+  page: state.app.currentPage,
+}), { addGlobalData, ...headerActions, loadData, loadMapData })(Header)
