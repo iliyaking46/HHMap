@@ -1,18 +1,17 @@
 import React from 'react'
-import {Provider} from 'react-redux'
-// import PropTypes from 'prop-types'
+import pure from 'recompose/pure'
+import { Provider } from 'react-redux'
+import configureStore from 'store'
 import App from './App'
-import store from '../store'
+// import PropTypes from 'prop-types'
 
-function Root() {
-    return (
-        <Provider store = {store}>
-            <App />
-        </Provider>
-    )
-}
+const Root = () => (
+  <Provider store={configureStore()}>
+    <App />
+  </Provider>
+)
 
 // Root.propTypes = {
 // }
 
-export default Root
+export default pure(Root)

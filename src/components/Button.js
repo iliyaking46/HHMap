@@ -1,12 +1,10 @@
-import React from 'react';
+import React from 'react'
+import pure from 'recompose/pure'
 
-export const Button = (props) => {
-  const {onClick, children} = props;
-  return (
-    <button className="btn btn-primary mx-3" onClick={onClick}>
-      {children}
-    </button>
-  )
-};
+export const Button = ({ onClick, children }) => (
+  <button className="btn btn-primary mx-3" onClick={onClick}>
+    {children}
+  </button>
+)
 
-export default Button;
+export default pure(Button)
