@@ -1,12 +1,7 @@
-import {
-  LOAD_TABLE_DATA,
-  START,
-  SUCCESS,
-  FAIL
-} from '../constants'
+import { LOAD_TABLE_DATA, START, SUCCESS, FAIL } from '../constants'
 
 const initialState = {
-  data: [], //вакансии
+  data: [],
   isLoadData: true,
   paramOfData: {
     found: '',
@@ -15,7 +10,7 @@ const initialState = {
     address: '',
     searchText: '',
     searchMetroId: '',
-  }
+  },
 }
 
 export default (state = initialState, { type, payload }) => {
@@ -24,19 +19,31 @@ export default (state = initialState, { type, payload }) => {
       return { ...state, data: payload.data, isLoadData: payload.isLoadData }
 
     case LOAD_TABLE_DATA + SUCCESS:
-      const params = {
-        found: payload.paramOfData.found,
-        page: payload.paramOfData.page + 1,
-        pages: payload.paramOfData.pages,
-        address: payload.paramOfData.address,
-        searchText: payload.paramOfData.searchText,
-        searchMetroId: payload.paramOfData.searchMetroId
+      // const params = {
+      //   found: payload.paramOfData.found,
+      //   page: payload.paramOfData.page + 1,
+      //   pages: payload.paramOfData.pages,
+      //   address: payload.paramOfData.address,
+      //   searchText: payload.paramOfData.searchText,
+      //   searchMetroId: payload.paramOfData.searchMetroId
+      // }
+      return {
+        data: [...state.data, ...payload.data],
+        isLoadData: payload.isLoadData,
+        paramOfData: {
+          found: payload.paramOfData.found,
+          page: payload.paramOfData.page + 1,
+          pages: payload.paramOfData.pages,
+          address: payload.paramOfData.address,
+          searchText: payload.paramOfData.searchText,
+          searchMetroId: payload.paramOfData.searchMetroId,
+        },
       }
-      return { data: [...state.data, ...payload.data], isLoadData: payload.isLoadData, paramOfData: params }
 
     case LOAD_TABLE_DATA + FAIL:
       return { ...state, isLoad: false, paramOfData: 0 }
 
-    default: return state;
+    default:
+      return state
   }
 }
