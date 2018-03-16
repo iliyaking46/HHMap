@@ -2,7 +2,7 @@
   "name": "hhmap",
   "description": "",
   "version": "0.1.0",
-  "author": "Lara",
+  "author": "Jet-team",
   "dependencies": {
     "history": "^4.7.2",
     "immutable": "^3.8.2",
@@ -49,7 +49,7 @@
   },
   "lint-staged": {
     "{,!(build|generators)/**/}*.js": [
-      "npm run prettier -- --write",
+      "npm run prettier --write",
       "git add"
     ]
   },

@@ -61,6 +61,7 @@ class VacancyPage extends React.Component {
               : 'не указана'
           }`}
         </p>
+        {/* eslint-disable-next-line */}
         <p dangerouslySetInnerHTML={{ __html: `${vacancy.description}` }} />
         {vacancy.address && <Map data={[vacancy]} />}
       </div>

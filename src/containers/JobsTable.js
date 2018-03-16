@@ -28,10 +28,11 @@ class JobsTable extends Component {
   }
 
   paginFunc = () => {
-    // console.log(this.props.table);
-    // const { loadPage } = this.props;
+    //  console.log(this.props.table)
     const { paramOfData } = this.props.table;
-    if (paramOfData.found === 0 || paramOfData.pages === 1) return null;
+    // const { loadPage } = this.props;
+    //  if (paramOfData.found === 0 || paramOfData.pages === 1) return null
+    if (paramOfData.pages === 0 || paramOfData.pages === 1) return null;
     switch (paramOfData.page) {
       case 1:
         return (
@@ -83,6 +84,42 @@ class JobsTable extends Component {
     }
   };
 
+  paginButton = () => {
+    const { paramOfData } = this.props.table;
+    //  console.log('_______________components/JobsTable.js(line 75)_______________', paramOfData.pages)
+
+    if (paramOfData.pages === 1) {
+      return null;
+    }
+
+    const listOfPages = [];
+    for (let i = 1; i <= paramOfData.pages; i + 1) {
+      listOfPages[i] = { page: i };
+    }
+
+    return listOfPages.map(item => {
+      //    let paramOfDataCopy = paramOfData
+      //    paramOfDataCopy.page = item.page
+      const paramOfDataCopy = {
+        found: paramOfData.found,
+        page: item.page,
+        pages: paramOfData.pages,
+        address: paramOfData.address,
+        searchText: paramOfData.searchText,
+        searchMetroId: paramOfData.searchMetroId,
+      };
+      return (
+        <button
+          style={{ display: 'inline-block' }}
+          key={item.page}
+          onClick={() => this.props.loadPage(paramOfDataCopy, 1)}
+        >
+          {item.page}
+        </button>
+      );
+    });
+  };
+
   render() {
     const { data, isLoadData, paramOfData } = this.props.table;
     return isLoadData ? (
@@ -122,7 +159,12 @@ class JobsTable extends Component {
             ))}
           </tbody>
         </table>
+        <p>
+          Страница:{' '}
+          {paramOfData.found === 0 ? paramOfData.page - 1 : paramOfData.page}
+        </p>
         <div>{this.paginFunc()}</div>
+        <div>{this.paginButton()}</div>
       </div>
     ) : (
       loader
