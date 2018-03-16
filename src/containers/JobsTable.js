@@ -4,8 +4,17 @@ import { connect } from 'react-redux'
 import { loader } from '../helpers'
 import { loadData, loadPage } from '../actions/table'
 import { changePage } from '../actions/main'
+import PropTypes from 'prop-types'
 
 class JobsTable extends Component {
+  static propTypes = {
+    app: PropTypes.objectOf(PropTypes.any).isRequired,
+    table: PropTypes.objectOf(PropTypes.any).isRequired,
+    loadData: PropTypes.func.isRequired,
+    loadPage: PropTypes.func.isRequired,
+    changePage: PropTypes.func.isRequired,
+  }
+
   componentDidMount() {
     this.props.changePage('home')
     // этот код для сверки с текущим состоянием, если есть какая то дата, которая уже была загружена, то не надо грузить еще раз

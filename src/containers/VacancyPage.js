@@ -1,14 +1,15 @@
-import React from 'react';
+import React from 'react'
 import Map from './Map'
+//import PropTypes from 'prop-types'
 
 // import {Map, fromJS} from 'immutable';
 
 export default class MovieCardPage extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       vacancy: undefined,
-      loaded: false
+      loaded: false,
     }
     fetch(`https://api.hh.ru/vacancies/${props.match.params.id}`)
       .then(response => response.json())
@@ -16,20 +17,35 @@ export default class MovieCardPage extends React.Component {
   }
 
   render() {
-    const { vacancy } = this.state;
-    const loader = <div className="indicator"><svg width="16px" height="12px"><polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline><polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline></svg></div>;
+    const { vacancy } = this.state
+    const loader = (
+      <div className="indicator">
+        <svg width="16px" height="12px">
+          <polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6" />
+          <polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6" />
+        </svg>
+      </div>
+    )
     if (!vacancy) {
-      return loader;
+      return loader
     }
-    return <div className="mb-5">
+    return (
+      <div className="mb-5">
         <h1>{vacancy.name}</h1>
-        {vacancy.employer.logo_urls && <img src={vacancy.employer.logo_urls.original} style={{maxWidth: '200px'}} alt={vacancy.name} />}
+        {vacancy.employer.logo_urls && (
+          <img src={vacancy.employer.logo_urls.original} style={{ maxWidth: '200px' }} alt={vacancy.name} />
+        )}
         <p>
-          {vacancy.key_skills.map(skill => <span key={skill.name} className="badge badge-success mr-2">{skill.name}</span> )}
+          {vacancy.key_skills.map(skill => (
+            <span key={skill.name} className="badge badge-success mr-2">
+              {skill.name}
+            </span>
+          ))}
         </p>
         <p>{vacancy.name}</p>
         <p dangerouslySetInnerHTML={{ __html: `${vacancy.description}` }} />
-        {vacancy.address && <Map data={[vacancy]}/>}
-    </div>
+        {vacancy.address && <Map data={[vacancy]} />}
+      </div>
+    )
   }
 }

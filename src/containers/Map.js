@@ -1,12 +1,18 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { YMaps, Map, ObjectManager, Button } from 'react-yandex-maps'
-// import { loader } from '../helpers'
+import PropTypes from 'prop-types'
 
 import { loadMapData } from '../actions/map'
 import { changePage } from '../actions/main'
 
 class yaMap extends React.Component {
+  static propTypes = {
+    app: PropTypes.objectOf(PropTypes.any).isRequired,
+    map: PropTypes.objectOf(PropTypes.any).isRequired,
+    changePage: PropTypes.func.isRequired,
+    loadMapData: PropTypes.func.isRequired,
+  }
   componentDidMount() {
     this.props.changePage('map')
     const { searchText, searchMetroId } = this.props.app
