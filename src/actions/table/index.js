@@ -1,24 +1,23 @@
-import { LOAD_TABLE_DATA, START, SUCCESS, FAIL } from '../../constants'
+import { LOAD_TABLE_DATA, START, SUCCESS, FAIL } from '../../constants';
 
 export function loadData(searchText, searchMetroId) {
   return dispatch => {
     dispatch({
       type: LOAD_TABLE_DATA + START,
       payload: { data: [], isLoadData: false },
-    })
-    const metro = searchMetroId ? '&metro=' + searchMetroId : ''
-    const text = searchText ? `&text=${searchText.split(' ').join('+')}` : ''
-    const baseUrl = `https://api.hh.ru/vacancies?area=1&${text}${metro}`
+    });
+    const metro = searchMetroId ? `&metro=${searchMetroId}` : '';
+    const text = searchText ? `&text=${searchText.split(' ').join('+')}` : '';
+    const baseUrl = `https://api.hh.ru/vacancies?area=1&${text}${metro}`;
     fetch(`${baseUrl}`)
       .then(resp => {
         if (resp.ok) {
-          return resp.json()
-        } else {
-          throw new Error('Something went wrong ...')
+          return resp.json();
         }
+        throw new Error('Something went wrong ...');
       })
-      .then(data => {
-        return dispatch({
+      .then(data =>
+        dispatch({
           type: LOAD_TABLE_DATA + SUCCESS,
           payload: {
             data: data.items,
@@ -28,19 +27,19 @@ export function loadData(searchText, searchMetroId) {
               page: data.page,
               pages: data.pages,
               address: baseUrl,
-              searchText: searchText,
-              searchMetroId: searchMetroId,
+              searchText,
+              searchMetroId,
             },
           },
-        })
-      })
-      .catch(error => {
-        return dispatch({
+        }),
+      )
+      .catch(error =>
+        dispatch({
           type: LOAD_TABLE_DATA + FAIL,
           payload: { error },
-        })
-      })
-  }
+        }),
+      );
+  };
 }
 
 export function loadPage(paging, decr) {
@@ -48,46 +47,37 @@ export function loadPage(paging, decr) {
     dispatch({
       type: LOAD_TABLE_DATA + START,
       payload: { data: [], isLoadData: false },
-    })
+    });
 
-    const baseUrl = paging.address
+    const baseUrl = paging.address;
     // console.log(paging);
-    fetch(`${baseUrl}`)
+    fetch(`${baseUrl}&page=${paging.page - decr}`)
       .then(resp => {
         if (resp.ok) {
-          return resp.json()
-        } else {
-          throw new Error('Something went wrong ...')
+          return resp.json();
         }
+        throw new Error('Something went wrong ...');
       })
-      .then(resp => {
-        //    console.log(resp.found);
-        const found = resp.found
-
-        const apiPromises = []
-        apiPromises.push(
-          fetch(`${baseUrl}&page=${paging.page - decr}`).then(resp =>
-            resp.json().then(resp => (resp.errors ? [] : resp.items))
-          )
-        )
-
-        //  paging = paging + 1
-        Promise.all(apiPromises).then(data =>
-          dispatch({
-            type: LOAD_TABLE_DATA + SUCCESS,
-            payload: {
-              data: data.reverse().reduce((newArr, nextArr) => [...newArr, ...nextArr], []),
-              isLoadData: true,
-              paramOfData: { found: found, page: paging.page - decr, pages: paging.pages, address: baseUrl },
+      .then(resp =>
+        dispatch({
+          type: LOAD_TABLE_DATA + SUCCESS,
+          payload: {
+            data: resp.items,
+            isLoadData: true,
+            paramOfData: {
+              found: paging.found,
+              page: paging.page - decr,
+              pages: paging.pages,
+              address: baseUrl,
             },
-          })
-        )
-      })
+          },
+        }),
+      )
       .catch(error => {
         dispatch({
           type: LOAD_TABLE_DATA + FAIL,
           payload: { error },
-        })
-      })
-  }
+        });
+      });
+  };
 }

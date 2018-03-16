@@ -1,16 +1,16 @@
-import React from 'react'
-import { Router, Route, Link } from 'react-router-dom'
-import createHistory from 'history/createBrowserHistory'
-import JobsTable from './JobsTable'
-import Header from './Header'
-import Map from './Map'
-import VacancyPage from './VacancyPage'
+import React from 'react';
+import { Router, Route, Link } from 'react-router-dom';
+import createHistory from 'history/createBrowserHistory';
+import JobsTable from './JobsTable';
+import Header from './Header';
+import Map from './Map';
+import VacancyPage from './VacancyPage';
 
-const history = createHistory()
+const history = createHistory();
 
 const App = () => {
-  const home = () => <JobsTable />
-  const map = () => <Map history={history} />
+  const home = () => <JobsTable />;
+  const map = () => <Map history={history} />;
   return (
     <Router history={history}>
       <div className="container mt-5">
@@ -29,6 +29,6 @@ const App = () => {
         <Route path="/vacancies/:id" component={VacancyPage} />
       </div>
     </Router>
-  )
-}
-export default App
+  );
+};
+export default App;

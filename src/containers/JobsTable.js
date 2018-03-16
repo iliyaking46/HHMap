@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
-import { loader } from '../helpers'
-import { loadData, loadPage } from '../actions/table'
-import { changePage } from '../actions/main'
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { loader } from '../helpers';
+import { loadData, loadPage } from '../actions/table';
+import { changePage } from '../actions/main';
 
 class JobsTable extends Component {
   static propTypes = {
@@ -13,66 +13,78 @@ class JobsTable extends Component {
     loadData: PropTypes.func.isRequired,
     loadPage: PropTypes.func.isRequired,
     changePage: PropTypes.func.isRequired,
-  }
+  };
 
   componentDidMount() {
-    this.props.changePage('home')
+    this.props.changePage('home');
     // этот код для сверки с текущим состоянием, если есть какая то дата, которая уже была загружена, то не надо грузить еще раз
-    const { searchText, searchMetroId } = this.props.app
+    const { searchText, searchMetroId } = this.props.app;
     if (
       searchText !== this.props.table.paramOfData.searchText ||
       searchMetroId !== this.props.table.paramOfData.searchMetroId
     ) {
-      this.props.loadData(searchText, searchMetroId)
+      this.props.loadData(searchText, searchMetroId);
     }
   }
 
   paginFunc = () => {
     // console.log(this.props.table);
     // const { loadPage } = this.props;
-    const { paramOfData } = this.props.table
-    if (paramOfData.found === 0 || paramOfData.pages === 1) return null
+    const { paramOfData } = this.props.table;
+    if (paramOfData.found === 0 || paramOfData.pages === 1) return null;
     switch (paramOfData.page) {
       case 1:
         return (
           <ul className="pagination justify-content-center">
             <li className="page-item">
-              <button className="page-link" onClick={() => this.props.loadPage(paramOfData, 0)}>
+              <button
+                className="page-link"
+                onClick={() => this.props.loadPage(paramOfData, 0)}
+              >
                 Вперед
               </button>
             </li>
           </ul>
-        )
+        );
       case paramOfData.pages:
         return (
           <ul className="pagination justify-content-center">
             <li className="page-item">
-              <button className="page-link" onClick={() => this.props.loadPage(paramOfData, 2)}>
+              <button
+                className="page-link"
+                onClick={() => this.props.loadPage(paramOfData, 2)}
+              >
                 Назад
               </button>
             </li>
           </ul>
-        )
+        );
       default:
         return (
           <ul className="pagination justify-content-center">
             <li className="page-item">
-              <button className="page-link" onClick={() => this.props.loadPage(paramOfData, 2)}>
+              <button
+                className="page-link"
+                onClick={() => this.props.loadPage(paramOfData, 2)}
+              >
                 Назад
               </button>
             </li>
             <li className="page-item">
-              <button className="page-link" onClick={() => this.props.loadPage(paramOfData, 0)}>
+              <button
+                className="page-link"
+                onClick={() => this.props.loadPage(paramOfData, 0)}
+              >
                 Вперед
               </button>
             </li>
           </ul>
-        )
+        );
     }
-  }
+  };
 
   render() {
-    const { data, isLoadData, paramOfData } = this.props.table
+    const { data, isLoadData, paramOfData } = this.props.table;
     return isLoadData ? (
       <div className="mt-3">
         <h2 className="text-center">Найдено {paramOfData.found} вакансий</h2>
@@ -100,7 +112,9 @@ class JobsTable extends Component {
                     'не указана'}
                 </td>
                 <td>
-                  {(item.salary != null && item.salary.to != null && `до ${item.salary.to} ${item.salary.currency}`) ||
+                  {(item.salary != null &&
+                    item.salary.to != null &&
+                    `до ${item.salary.to} ${item.salary.currency}`) ||
                     'не указана'}
                 </td>
                 <td>{new Date(item.created_at).toLocaleString()}</td>
@@ -112,7 +126,7 @@ class JobsTable extends Component {
       </div>
     ) : (
       loader
-    )
+    );
   }
 }
 export default connect(
@@ -120,5 +134,5 @@ export default connect(
     table: state.table,
     app: state.app,
   }),
-  { loadData, loadPage, changePage }
-)(JobsTable)
+  { loadData, loadPage, changePage },
+)(JobsTable);

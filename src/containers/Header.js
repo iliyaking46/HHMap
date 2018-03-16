@@ -1,14 +1,14 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import Select from 'react-select'
-import 'react-select/dist/react-select.css'
-import TextBox from '../components/TextBox'
-import Button from '../components/Button'
-import * as headerActions from '../actions/header'
-import { addGlobalData } from '../actions/main'
-import { loadMapData } from '../actions/map'
-import { loadData } from '../actions/table'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
+import TextBox from '../components/TextBox';
+import Button from '../components/Button';
+import * as headerActions from '../actions/header';
+import { addGlobalData } from '../actions/main';
+import { loadMapData } from '../actions/map';
+import { loadData } from '../actions/table';
 
 class Header extends Component {
   static propTypes = {
@@ -21,32 +21,32 @@ class Header extends Component {
     history: PropTypes.objectOf(PropTypes.any).isRequired,
     header: PropTypes.objectOf(PropTypes.any).isRequired,
     page: PropTypes.string.isRequired,
-  }
+  };
 
   componentDidMount() {
-    this.props.loadMetro()
+    this.props.loadMetro();
   }
 
   searchHandler = () => {
-    const { searchText, metroId } = this.props.header
-    this.props.addGlobalData(metroId, searchText)
-    this.props.history.push('/')
+    const { searchText, metroId } = this.props.header;
+    this.props.addGlobalData(metroId, searchText);
+    this.props.history.push('/');
     // console.log(this.props.page);
 
     switch (this.props.page) {
       case 'home':
-        this.props.loadData(searchText, metroId)
-        break
+        this.props.loadData(searchText, metroId);
+        break;
       case 'map':
-        this.props.loadMapData(searchText, metroId)
-        break
+        this.props.loadMapData(searchText, metroId);
+        break;
       default:
-        break
+        break;
     }
-  }
+  };
 
   render() {
-    const { searchText, metroId, metro } = this.props.header
+    const { searchText, metroId, metro } = this.props.header;
     const stations = metro
       .map(line => [
         { label: line.name, value: line.id },
@@ -55,7 +55,7 @@ class Header extends Component {
           value: station.id,
         })),
       ])
-      .reduce((newArr, nextArr) => [...newArr, ...nextArr], [])
+      .reduce((newArr, nextArr) => [...newArr, ...nextArr], []);
 
     return (
       <div className="row">
@@ -78,7 +78,7 @@ class Header extends Component {
         </div>
         <Button onClick={this.searchHandler}>Поиск</Button>
       </div>
-    )
+    );
   }
 }
 
@@ -87,5 +87,5 @@ export default connect(
     header: state.header,
     page: state.app.currentPage,
   }),
-  { addGlobalData, ...headerActions, loadData, loadMapData }
-)(Header)
+  { addGlobalData, ...headerActions, loadData, loadMapData },
+)(Header);

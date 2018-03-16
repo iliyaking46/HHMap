@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export const loader = (
   <div className="indicator">
@@ -7,4 +7,4 @@ export const loader = (
       <polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6" />
     </svg>
   </div>
-)
+);
