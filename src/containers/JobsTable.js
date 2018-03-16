@@ -110,7 +110,6 @@ class JobsTable extends Component {
     )
   }
 }
-
 export default connect(
   state => ({
     table: state.table,

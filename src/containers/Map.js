@@ -8,9 +8,11 @@ import { changePage } from '../actions/main'
 
 class yaMap extends React.Component {
   componentDidMount() {
-    this.props.changePage('map')
-    const { searchText, searchMetroId } = this.props.app
-    this.props.loadMapData(searchText, searchMetroId)
+    if (!this.props.data) {
+      this.props.changePage('map')
+      const { searchText, searchMetroId } = this.props.app
+      this.props.loadMapData(searchText, searchMetroId)
+    }
   }
 
   onLoadMap = event => {
@@ -20,7 +22,13 @@ class yaMap extends React.Component {
   }
 
   render() {
-    const { data, mapState } = this.props.map
+    const { mapState } = this.props.map
+    let data
+    if (this.props.data) {
+      data = this.props.data
+    } else {
+      data = this.props.map.data
+    }
     const ymapData = data
       .filter(item => item.address != null && item.address.lat != null && item.address.lng != null)
       .map(item => ({
@@ -48,7 +56,7 @@ class yaMap extends React.Component {
         <Map state={mapState} width="100%" height={500} onBoundsChange={this.onLoadMap}>
           <Button
             data={{ content: `Количество ваканский на карте ${ymapData.length}` }}
-            options={{ float: 'right', maxWidth: '100%' }}
+            options={{ margin: 'auto', maxWidth: '600' }}
           />
           <ObjectManager
             options={{

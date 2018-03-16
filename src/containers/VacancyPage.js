@@ -1,35 +1,70 @@
-import React from 'react';
+import React from 'react'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import Map from './Map'
-
+import { loader } from '../helpers'
+import { loadVacancy } from '../actions/vacancy'
 // import {Map, fromJS} from 'immutable';
 
-export default class MovieCardPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      vacancy: undefined,
-      loaded: false
+class VacancyPage extends React.Component {
+  static propTypes = {
+    loadVacancy: PropTypes.func.isRequired,
+    vacancies: PropTypes.arrayOf(PropTypes.any).isRequired,
+    isLoad: PropTypes.bool.isRequired,
+    match: PropTypes.objectOf(PropTypes.any).isRequired,
+  }
+
+  componentWillMount() {
+    const vacancy = this.props.vacancies.find(item => item.id === this.props.match.params.id)
+    if (!vacancy) {
+      this.props.loadVacancy(this.props.match.params.id)
     }
-    fetch(`https://api.hh.ru/vacancies/${props.match.params.id}`)
-      .then(response => response.json())
-      .then(response => this.setState({ vacancy: response }))
   }
 
   render() {
-    const { vacancy } = this.state;
-    const loader = <div className="indicator"><svg width="16px" height="12px"><polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline><polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline></svg></div>;
-    if (!vacancy) {
-      return loader;
+    const { vacancies, isLoad } = this.props
+    const vacancy = vacancies.find(item => item.id === this.props.match.params.id)
+    if (!isLoad || !vacancy) {
+      return loader
     }
-    return <div className="mb-5">
+    return (
+      <div className="mb-5">
         <h1>{vacancy.name}</h1>
-        {vacancy.employer.logo_urls && <img src={vacancy.employer.logo_urls.original} style={{maxWidth: '200px'}} alt={vacancy.name} />}
+        {vacancy.employer.logo_urls && (
+          <img
+            src={vacancy.employer.logo_urls.original}
+            className="float-right"
+            style={{ maxWidth: '200px' }}
+            alt={vacancy.name}
+          />
+        )}
         <p>
-          {vacancy.key_skills.map(skill => <span key={skill.name} className="badge badge-success mr-2">{skill.name}</span> )}
+          {vacancy.key_skills.map(skill => (
+            <span key={skill.name} className="badge badge-success mr-2">
+              {skill.name}
+            </span>
+          ))}
         </p>
         <p>{vacancy.name}</p>
+        <p>
+          {`З/п ${
+            vacancy.salary
+              ? (vacancy.salary.from != null ? `от ${vacancy.salary.from} ` : '') +
+                (vacancy.salary.to != null ? `до ${vacancy.salary.to} ` : '') +
+                vacancy.salary.currency
+              : 'не указана'
+          }`}
+        </p>
         <p dangerouslySetInnerHTML={{ __html: `${vacancy.description}` }} />
-        {vacancy.address && <Map data={[vacancy]}/>}
-    </div>
+        {vacancy.address && <Map data={[vacancy]} />}
+      </div>
+    )
   }
 }
+export default connect(
+  state => ({
+    vacancies: state.vacancyCard.vacancies,
+    isLoad: state.vacancyCard.isLoad,
+  }),
+  { loadVacancy }
+)(VacancyPage)
