@@ -1,11 +1,20 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import { loader } from '../helpers'
 import { loadData, loadPage } from '../actions/table'
 import { changePage } from '../actions/main'
 
 class JobsTable extends Component {
+  static propTypes = {
+    app: PropTypes.objectOf(PropTypes.any).isRequired,
+    table: PropTypes.objectOf(PropTypes.any).isRequired,
+    loadData: PropTypes.func.isRequired,
+    loadPage: PropTypes.func.isRequired,
+    changePage: PropTypes.func.isRequired,
+  }
+
   componentDidMount() {
     this.props.changePage('home')
     // этот код для сверки с текущим состоянием, если есть какая то дата, которая уже была загружена, то не надо грузить еще раз
@@ -20,15 +29,15 @@ class JobsTable extends Component {
 
   paginFunc = () => {
     // console.log(this.props.table);
+    // const { loadPage } = this.props;
     const { paramOfData } = this.props.table
-    const { loadPage } = this.props
     if (paramOfData.found === 0 || paramOfData.pages === 1) return null
     switch (paramOfData.page) {
       case 1:
         return (
           <ul className="pagination justify-content-center">
             <li className="page-item">
-              <button className="page-link" onClick={() => loadPage(paramOfData, 0)}>
+              <button className="page-link" onClick={() => this.props.loadPage(paramOfData, 0)}>
                 Вперед
               </button>
             </li>
@@ -38,7 +47,7 @@ class JobsTable extends Component {
         return (
           <ul className="pagination justify-content-center">
             <li className="page-item">
-              <button className="page-link" onClick={() => loadPage(paramOfData, 2)}>
+              <button className="page-link" onClick={() => this.props.loadPage(paramOfData, 2)}>
                 Назад
               </button>
             </li>
@@ -48,12 +57,12 @@ class JobsTable extends Component {
         return (
           <ul className="pagination justify-content-center">
             <li className="page-item">
-              <button className="page-link" onClick={() => loadPage(paramOfData, 2)}>
+              <button className="page-link" onClick={() => this.props.loadPage(paramOfData, 2)}>
                 Назад
               </button>
             </li>
             <li className="page-item">
-              <button className="page-link" onClick={() => loadPage(paramOfData, 0)}>
+              <button className="page-link" onClick={() => this.props.loadPage(paramOfData, 0)}>
                 Вперед
               </button>
             </li>
@@ -78,29 +87,25 @@ class JobsTable extends Component {
             </tr>
           </thead>
           <tbody>
-            {data.map(item => {
-              return (
-                <tr key={item.id}>
-                  <td>
-                    <Link to={`vacancies/${item.id}`}>{item.name}</Link>
-                  </td>
-                  <td>{item.employer.name}</td>
-                  <td>
-                    {(item.salary != null &&
-                      item.salary.from != null &&
-                      `от ${item.salary.from} ${item.salary.currency}`) ||
-                      'не указана'}
-                  </td>
-                  <td>
-                    {(item.salary != null &&
-                      item.salary.to != null &&
-                      `до ${item.salary.to} ${item.salary.currency}`) ||
-                      'не указана'}
-                  </td>
-                  <td>{new Date(item.created_at).toLocaleString()}</td>
-                </tr>
-              )
-            })}
+            {data.map(item => (
+              <tr key={item.id}>
+                <td>
+                  <Link to={`vacancies/${item.id}`}>{item.name}</Link>
+                </td>
+                <td>{item.employer.name}</td>
+                <td>
+                  {(item.salary != null &&
+                    item.salary.from != null &&
+                    `от ${item.salary.from} ${item.salary.currency}`) ||
+                    'не указана'}
+                </td>
+                <td>
+                  {(item.salary != null && item.salary.to != null && `до ${item.salary.to} ${item.salary.currency}`) ||
+                    'не указана'}
+                </td>
+                <td>{new Date(item.created_at).toLocaleString()}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
         <div>{this.paginFunc()}</div>

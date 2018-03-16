@@ -45,8 +45,6 @@ class Header extends Component {
     }
   }
 
-  // handleSubmit = (e, metroId, searchText) => this.props.loadData(metroId, searchText) // Оно не используется
-
   render() {
     const { searchText, metroId, metro } = this.props.header
     const stations = metro
