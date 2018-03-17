@@ -1,14 +1,21 @@
-import { LOAD_TABLE_DATA, START, SUCCESS, FAIL } from '../../constants';
+import {
+  LOAD_TABLE_DATA,
+  LOAD_PAGE_TABLE_DATA,
+  CHANGE_VACANCIES_PAGE,
+  START,
+  SUCCESS,
+  FAIL,
+} from '../../constants';
 
 export function loadData(searchText, searchMetroId) {
   return dispatch => {
     dispatch({
       type: LOAD_TABLE_DATA + START,
-      payload: { data: [], isLoadData: false },
+      payload: { data: [], isLoad: false, isLoadData: true },
     });
     const metro = searchMetroId ? `&metro=${searchMetroId}` : '';
     const text = searchText ? `&text=${searchText.split(' ').join('+')}` : '';
-    const baseUrl = `https://api.hh.ru/vacancies?area=1&${text}${metro}`;
+    const baseUrl = `https://api.hh.ru/vacancies?area=1${text}${metro}`;
     fetch(`${baseUrl}`)
       .then(resp => {
         if (resp.ok) {
@@ -21,15 +28,14 @@ export function loadData(searchText, searchMetroId) {
           type: LOAD_TABLE_DATA + SUCCESS,
           payload: {
             data: data.items,
+            isLoad: true,
             isLoadData: true,
-            paramOfData: {
-              found: data.found,
-              page: data.page,
-              pages: data.pages,
-              address: baseUrl,
-              searchText,
-              searchMetroId,
-            },
+            found: data.found,
+            page: data.page,
+            pages: data.pages,
+            address: baseUrl,
+            searchText,
+            searchMetroId,
           },
         }),
       )
@@ -42,16 +48,23 @@ export function loadData(searchText, searchMetroId) {
   };
 }
 
-export function loadPage(paging, decr) {
+export function changeVacanciesPage(page) {
+  return {
+    type: CHANGE_VACANCIES_PAGE,
+    payload: { page },
+  };
+}
+
+export function loadPage(address, page) {
   return dispatch => {
     dispatch({
-      type: LOAD_TABLE_DATA + START,
-      payload: { data: [], isLoadData: false },
+      type: LOAD_PAGE_TABLE_DATA + START,
+      payload: { isLoad: false },
     });
 
-    const baseUrl = paging.address;
+    const baseUrl = address;
     // console.log(paging);
-    fetch(`${baseUrl}&page=${paging.page - decr}`)
+    fetch(`${baseUrl}&page=${page}`)
       .then(resp => {
         if (resp.ok) {
           return resp.json();
@@ -60,22 +73,17 @@ export function loadPage(paging, decr) {
       })
       .then(resp =>
         dispatch({
-          type: LOAD_TABLE_DATA + SUCCESS,
+          type: LOAD_PAGE_TABLE_DATA + SUCCESS,
           payload: {
             data: resp.items,
-            isLoadData: true,
-            paramOfData: {
-              found: paging.found,
-              page: paging.page - decr,
-              pages: paging.pages,
-              address: baseUrl,
-            },
+            isLoad: true,
+            page,
           },
         }),
       )
       .catch(error => {
         dispatch({
-          type: LOAD_TABLE_DATA + FAIL,
+          type: LOAD_PAGE_TABLE_DATA + FAIL,
           payload: { error },
         });
       });

@@ -15,6 +15,7 @@ class VacancyPage extends React.Component {
   };
 
   componentWillMount() {
+    window.scrollTo(0, 0);
     const vacancy = this.props.vacancies.find(
       item => item.id === this.props.match.params.id,
     );
