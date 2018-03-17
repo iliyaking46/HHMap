@@ -19,10 +19,10 @@
     "redux": "^3.7.2",
     "redux-devtools-extension": "^2.13.2",
     "redux-thunk": "^2.2.0",
-    "reselect": "^3.0.1"
+    "reselect": "^3.0.1",
+    "babel-eslint": "^8.0.2"
   },
   "devDependencies": {
-    "babel-eslint": "^8.0.2",
     "eslint": "^4.10.0",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-config-prettier": "^2.7.0",
