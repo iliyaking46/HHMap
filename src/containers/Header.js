@@ -31,8 +31,6 @@ class Header extends Component {
     const { searchText, metroId } = this.props.header;
     this.props.addGlobalData(metroId, searchText);
     this.props.history.push('/');
-    // console.log(this.props.page);
-
     switch (this.props.page) {
       case 'home':
         this.props.loadData(searchText, metroId);
@@ -59,7 +57,7 @@ class Header extends Component {
 
     return (
       <div className="row">
-        <div className="col-3">
+        <div className="col-md-3 mb-3">
           <Select
             options={stations}
             value={metroId}
@@ -69,14 +67,18 @@ class Header extends Component {
             onChange={selected => this.props.changeSelection(selected)}
           />
         </div>
-        <div className="col">
+        <div className="col-md mb-3">
           <TextBox
             onChange={text => this.props.changeTextSearch(text)}
             onKeyDown={enter => enter && this.searchHandler()}
             value={searchText}
           />
         </div>
-        <Button onClick={this.searchHandler}>Поиск</Button>
+        <div className="col col-md-auto mb-3">
+          <Button className="mb-3" onClick={this.searchHandler}>
+            Поиск
+          </Button>
+        </div>
       </div>
     );
   }

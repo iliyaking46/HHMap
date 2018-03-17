@@ -30,8 +30,6 @@
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-prettier": "^2.3.1",
     "eslint-plugin-react": "^7.4.0",
-    "husky": "^0.14.3",
-    "lint-staged": "^4.3.0",
     "node-plop": "^0.5.5",
     "plop": "^1.7.4",
     "prettier": "^1.8.0"
@@ -43,16 +41,9 @@
     "eject": "react-scripts eject",
     "prettier": "prettier --single-quote",
     "format": "npm run prettier -- --write '{,!(build|generators)/**/}*.js'",
-    "precommit": "lint-staged",
     "eslint-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "lint": "eslint **/*.js --quiet",
     "lint-fix": "eslint --fix"
-  },
-  "lint-staged": {
-    "{,!(build|generators)/**/}*.js": [
-      "npm run prettier --write",
-      "git add"
-    ]
   },
   "engines": {
     "npm": ">=4",
