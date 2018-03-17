@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
 import { loader } from '../helpers';
+import { JobItem } from '../components/JobItem';
 import { loadData, loadPage, changeVacanciesPage } from '../actions/table';
 import { changePage } from '../actions/main';
 
-class JobsTable extends Component {
+class JobsList extends PureComponent {
   static propTypes = {
     app: PropTypes.objectOf(PropTypes.any).isRequired,
     table: PropTypes.objectOf(PropTypes.any).isRequired,
@@ -49,52 +49,23 @@ class JobsTable extends Component {
     }
     return isLoad && currPage ? (
       <div className="mt-3">
-        <h2 className="text-center">Найдено {found} вакансий</h2>
-        <table className="table table-bordered">
-          <thead>
-            <tr className="thead-light">
-              <th>Название</th>
-              <th>Работодатель</th>
-              <th>Зарплата от</th>
-              <th>Зарплата до</th>
-              <th>Создана</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currPage.items.map(item => (
-              <tr key={item.id}>
-                <td>
-                  <Link to={`vacancies/${item.id}`}>{item.name}</Link>
-                </td>
-                <td>{item.employer.name}</td>
-                <td>
-                  {(item.salary != null &&
-                    item.salary.from != null &&
-                    `от ${item.salary.from} ${item.salary.currency}`) ||
-                    'не указана'}
-                </td>
-                <td>
-                  {(item.salary != null &&
-                    item.salary.to != null &&
-                    `до ${item.salary.to} ${item.salary.currency}`) ||
-                    'не указана'}
-                </td>
-                <td>{new Date(item.created_at).toLocaleString()}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <h3 className="text-center">Найдено {found} вакансий</h3>
+
+        {currPage.items.map(item => <JobItem item={item} key={item.id} />)}
+
+        {/* <td>{new Date(item.created_at).toLocaleString()}</td>
+          */}
         <div className="justify-content-center">
           <ReactPaginate
-            previousLabel={'Назад'}
-            nextLabel={'Далее'}
+            previousLabel={'«'}
+            nextLabel={'»'}
             disableInitialCallback
             breakLabel={<button className="page-link">...</button>}
             breakClassName={'page-item'}
             pageCount={pages}
             initialPage={page}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
+            marginPagesDisplayed={1}
+            pageRangeDisplayed={4}
             onPageChange={this.handlePageClick}
             containerClassName={'pagination justify-content-center'}
             pageClassName={'page-item'}
@@ -108,7 +79,9 @@ class JobsTable extends Component {
         </div>
       </div>
     ) : (
-      loader
+      <div className="position-relative" style={{ minHeight: '150px' }}>
+        {loader}
+      </div>
     );
   }
 }
@@ -118,4 +91,4 @@ export default connect(
     app: state.app,
   }),
   { loadData, loadPage, changePage, changeVacanciesPage },
-)(JobsTable);
+)(JobsList);

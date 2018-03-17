@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Map from './Map';
@@ -6,7 +6,7 @@ import { loader } from '../helpers';
 import { loadVacancy } from '../actions/vacancy';
 // import {Map, fromJS} from 'immutable';
 
-class VacancyPage extends React.Component {
+class VacancyPage extends PureComponent {
   static propTypes = {
     loadVacancy: PropTypes.func.isRequired,
     vacancies: PropTypes.arrayOf(PropTypes.any).isRequired,
@@ -34,11 +34,11 @@ class VacancyPage extends React.Component {
     }
     return (
       <div className="mb-5">
-        <h1>{vacancy.name}</h1>
+        <h3>{vacancy.name}</h3>
         {vacancy.employer.logo_urls && (
           <img
             src={vacancy.employer.logo_urls.original}
-            className="float-right"
+            className="float-sm-right"
             style={{ maxWidth: '200px' }}
             alt={vacancy.name}
           />
@@ -50,7 +50,6 @@ class VacancyPage extends React.Component {
             </span>
           ))}
         </p>
-        <p>{vacancy.name}</p>
         <p>
           {`З/п ${
             vacancy.salary

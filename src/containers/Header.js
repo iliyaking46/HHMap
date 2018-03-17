@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -10,7 +10,7 @@ import { addGlobalData } from '../actions/main';
 import { loadMapData } from '../actions/map';
 import { loadData } from '../actions/table';
 
-class Header extends Component {
+class Header extends PureComponent {
   static propTypes = {
     loadMetro: PropTypes.func.isRequired,
     addGlobalData: PropTypes.func.isRequired,
@@ -74,7 +74,7 @@ class Header extends Component {
             value={searchText}
           />
         </div>
-        <div className="col col-md-auto mb-3">
+        <div className="col col-md-auto mb-3 text-center">
           <Button className="mb-3" onClick={this.searchHandler}>
             Поиск
           </Button>

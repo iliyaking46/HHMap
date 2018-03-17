@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { YMaps, Map, ObjectManager, Button } from 'react-yandex-maps';
 import PropTypes from 'prop-types';
@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { loadMapData } from '../actions/map';
 import { changePage } from '../actions/main';
 
-class yaMap extends React.Component {
+class yaMap extends PureComponent {
   static propTypes = {
     app: PropTypes.objectOf(PropTypes.any).isRequired,
     map: PropTypes.objectOf(PropTypes.any).isRequired,
