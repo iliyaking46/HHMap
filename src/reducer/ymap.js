@@ -1,23 +1,41 @@
-import { LOAD_MAP_DATA, START, SUCCESS, FAIL } from '../constants';
+import { fromJS } from "immutable";
+import { LOAD_MAP_DATA, START, SUCCESS, FAIL, CHANGE_YMAP_STATE } from '../constants';
 
-const initialState = {
+const initialMapData = fromJS({
   data: [],
-  mapState: { center: [55.76, 37.64], zoom: 10, controls: [] },
   isLoadData: true,
-};
+});
 
-export default (state = initialState, { type, payload }) => {
+export const ymap = (state = initialMapData, { type, payload }) => {
   switch (type) {
     case LOAD_MAP_DATA + START:
-      return { ...state, isLoadData: payload.isLoadData };
+      return state.setIn(['isLoadData'], payload.isLoadData);
 
     case LOAD_MAP_DATA + SUCCESS:
-      return { ...state, data: payload.data, isLoadData: payload.isLoadData };
+      return state
+        .setIn(['data'], fromJS(payload.data))
+        .setIn(['isLoadData'], payload.isLoadData);
 
     case LOAD_MAP_DATA + FAIL:
-      return { ...state, isLoad: false };
+      return state.setIn(['isLoad'], payload.isLoadData);
 
     default:
       return state;
   }
 };
+
+const initialMapState = {
+  center: [55.76, 37.64],
+  zoom: 10,
+  controls: [],
+}
+
+export const mapState = (state = initialMapState, { type, payload }) => {
+  switch (type) {
+    case CHANGE_YMAP_STATE:
+      return { ...state, mapState: payload }
+        // .setIn(['mapState'], payload)
+    default:
+      return state;
+  }
+}

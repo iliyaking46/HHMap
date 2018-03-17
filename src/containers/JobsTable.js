@@ -21,18 +21,23 @@ class JobsTable extends Component {
     this.props.changePage('home');
     // этот код для сверки с текущим состоянием, если есть какая
     //  то дата, которая уже была загружена, то не надо грузить еще раз
-    const { searchText, searchMetroId } = this.props.app;
+    const { app } = this.props;
+    const searchText = app.get('searchText');
+    const searchMetroId = app.get('searchMetroId');
+    const { table } = this.props;
     if (
-      searchText !== this.props.table.searchText ||
-      searchMetroId !== this.props.table.searchMetroId
+      searchText !== table.get('searchText') ||
+      searchMetroId !== table.get('searchMetroId')
     ) {
       this.props.loadData(searchText, searchMetroId);
     }
   }
 
   handlePageClick = ({ selected }) => {
-    const { address, data } = this.props.table;
-    const isDownload = data.find(item => item.page === selected);
+    const { table } = this.props;
+    const address = table.get('address');
+    const data  = table.get('data');
+    const isDownload = data.find(item => item.get('page') === selected);
     window.scrollTo(0, 0);
     if (isDownload) {
       this.props.changeVacanciesPage(selected);
@@ -42,8 +47,16 @@ class JobsTable extends Component {
   };
 
   render() {
-    const { data, isLoadData, isLoad, found, page, pages } = this.props.table;
-    const currPage = data.find(item => item.page === page);
+    const { table } = this.props;
+    const data = table.get('data');
+    const isLoadData = table.get('isLoadData');
+    const isLoad = table.get('isLoad');
+    const found = table.get('found');
+    const page = table.get('page');
+    const pages = table.get('pages');
+    const currPage = data.size > 0
+      ? data.find(item => item.get('page') === page)
+      : 0
     if (!isLoadData) {
       return 'А ты поиск сначала сделай!';
     }
@@ -61,25 +74,25 @@ class JobsTable extends Component {
             </tr>
           </thead>
           <tbody>
-            {currPage.items.map(item => (
-              <tr key={item.id}>
+            {currPage.get('items').map(item => (
+              <tr key={item.get('id')}>
                 <td>
-                  <Link to={`vacancies/${item.id}`}>{item.name}</Link>
+                  <Link to={`vacancies/${item.get('id')}`}>{item.get('name')}</Link>
                 </td>
-                <td>{item.employer.name}</td>
+                <td>{item.getIn(['employer', 'name'])}</td>
                 <td>
-                  {(item.salary != null &&
-                    item.salary.from != null &&
-                    `от ${item.salary.from} ${item.salary.currency}`) ||
+                  {(item.get('salary') &&
+                    item.getIn(['salary', 'from']) &&
+                    `от ${item.getIn(['salary', 'from'])} ${item.getIn(['salary', 'currency'])}`) ||
                     'не указана'}
                 </td>
                 <td>
-                  {(item.salary != null &&
-                    item.salary.to != null &&
-                    `до ${item.salary.to} ${item.salary.currency}`) ||
+                  {(item.get('salary') &&
+                    item.getIn(['salary', 'to']) &&
+                    `до ${item.getIn(['salary', 'to'])} ${item.getIn(['salary', 'currency'])}`) ||
                     'не указана'}
                 </td>
-                <td>{new Date(item.created_at).toLocaleString()}</td>
+                <td>{new Date(item.get('created_at')).toLocaleString()}</td>
               </tr>
             ))}
           </tbody>
@@ -114,8 +127,8 @@ class JobsTable extends Component {
 }
 export default connect(
   state => ({
-    table: state.table,
-    app: state.app,
+    table: state.get('table'),
+    app: state.get('app'),
   }),
   { loadData, loadPage, changePage, changeVacanciesPage },
 )(JobsTable);

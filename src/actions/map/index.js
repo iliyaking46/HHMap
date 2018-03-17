@@ -1,4 +1,11 @@
-import { LOAD_MAP_DATA, START, SUCCESS, FAIL } from '../../constants';
+import { LOAD_MAP_DATA, START, SUCCESS, FAIL, CHANGE_YMAP_STATE } from '../../constants';
+
+export function updateYAMapState(center, zoom) {
+  return {
+    type: CHANGE_YMAP_STATE,
+    payload: { center, zoom },
+  }
+}
 
 export function loadMapData(searchText, searchMetroId, coords) {
   return dispatch => {

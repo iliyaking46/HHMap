@@ -1,3 +1,4 @@
+import {fromJS} from "immutable";
 import {
   LOAD_TABLE_DATA,
   LOAD_PAGE_TABLE_DATA,
@@ -7,7 +8,7 @@ import {
   FAIL,
 } from '../constants';
 
-const initialState = {
+const initialState = fromJS({
   data: [],
   isLoadData: false,
   isLoad: true,
@@ -17,20 +18,18 @@ const initialState = {
   address: '',
   searchText: '',
   searchMetroId: '',
-};
+});
 
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case LOAD_TABLE_DATA + START:
-      return {
-        ...state,
-        data: payload.data,
-        isLoad: payload.isLoad,
-        isLoadData: payload.isLoadData,
-      };
+      return state
+        .setIn(['data'], fromJS(payload.data))
+        .setIn(['isLoad'], payload.isLoad)
+        .setIn(['isLoadData'], payload.isLoadData);
 
     case LOAD_TABLE_DATA + SUCCESS:
-      return {
+      return fromJS({
         data: [
           {
             items: payload.data,
@@ -45,38 +44,32 @@ export default (state = initialState, { type, payload }) => {
         address: payload.address,
         searchText: payload.searchText,
         searchMetroId: payload.searchMetroId,
-      };
+      });
 
     case LOAD_TABLE_DATA + FAIL:
-      return { ...state, isLoad: false };
+      return state.setIn(['isLoad'], false);
 
     // Reducer for adding page
 
     case LOAD_PAGE_TABLE_DATA + START:
-      return {
-        ...state,
-        isLoad: payload.isLoad,
-      };
+      return state.setIn(['isLoad'], true);
 
     case LOAD_PAGE_TABLE_DATA + SUCCESS:
-      return {
-        ...state,
-        data: [
-          ...state.data,
-          {
-            items: payload.data,
-            page: payload.page,
-          },
-        ],
-        page: payload.page,
-        isLoad: payload.isLoad,
-      };
+      return state
+        .setIn(['page'], payload.page)
+        .setIn(['isLoad'], payload.isLoad)
+        .updateIn(['data'], dataArr => (dataArr.push(fromJS({
+          items: payload.data,
+          page: payload.page,
+        }))));
+        // .mergeIn(['data', 'items'], payload.data.items)
+        // .mergeIn(['data', 'page'], payload.page)
 
     case LOAD_PAGE_TABLE_DATA + FAIL:
-      return { ...state, isLoad: false };
+      return state.setIn(['isLoad'], false);
 
     case CHANGE_VACANCIES_PAGE:
-      return { ...state, page: payload.page };
+      return state.setIn(['page'], payload.page);
 
     default:
       return state;

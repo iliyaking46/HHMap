@@ -1,22 +1,22 @@
 import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import {fromJS} from 'immutable';
 import rootReducer from 'reducer';
 
 export default function configureStore(initialState = {}) {
   const middlewares = [ReduxThunk];
   const enhancers = [
     applyMiddleware(...middlewares),
-    // применяет мидлвеары
   ];
   const composeEnhancers = composeWithDevTools({
     // other compose enhancers if any
     // Specify here other options if needed
   });
-  // createStore(rootReducer, composeWithDevTools(applyMiddleware(ReduxThunk)))
+
   const store = createStore(
     rootReducer,
-    initialState,
+    fromJS(initialState),
     composeEnhancers(...enhancers),
   );
 

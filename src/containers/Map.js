@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { YMaps, Map, ObjectManager, Button } from 'react-yandex-maps';
 import PropTypes from 'prop-types';
 
-import { loadMapData } from '../actions/map';
+import { loadMapData, updateYAMapState } from '../actions/map';
 import { changePage } from '../actions/main';
 
 class yaMap extends React.Component {
@@ -18,65 +18,81 @@ class yaMap extends React.Component {
   componentDidMount() {
     if (!this.props.data) {
       this.props.changePage('map');
-      const { searchText, searchMetroId } = this.props.app;
+      const { app } = this.props
+      const searchMetroId = app.get('searchMetroId');
+      const searchText = app.get('searchText');
       this.props.loadMapData(searchText, searchMetroId);
     }
   }
 
-  onLoadMap = event => {
-    const coords = event.originalEvent.map.getBounds();
-    const { searchText, searchMetroId } = this.props.app;
+  onBoundsChange = event => {
+    const { app } = this.props;
+    const searchMetroId = app.get('searchMetroId');
+    const searchText = app.get('searchText');
+
+    const map = event.get('map');
+    const coords = map.getBounds();
+    const center = map.getCenter();
+    const zoom = map.getZoom();
+    this.props.updateYAMapState(center, zoom);
     this.props.loadMapData(searchText, searchMetroId, coords);
   };
 
   render() {
-    const { mapState } = this.props.map;
-    let data;
-    if (this.props.data) {
-      data = this.props.data;
-    } else {
-      data = this.props.map.data;
-    }
+    const mapState = this.props.mapState;
+    const data = this.props.data || this.props.map.get('data');
+
     const ymapData = data
       .filter(
         item =>
-          item.address != null &&
-          item.address.lat != null &&
-          item.address.lng != null,
+          item.get('address') &&
+          item.getIn(['address', 'lat']) &&
+          item.getIn(['address', 'lng']),
       )
       .map(item => ({
         type: 'Feature',
-        id: item.id,
+        id: item.get('id'),
         geometry: {
           type: 'Point',
-          coordinates: [item.address.lat, item.address.lng],
+          coordinates: [
+            item.getIn(['address', 'lat']),
+            item.getIn(['address', 'lng']),
+          ],
         },
         properties: {
-          balloonContentHeader: `<a href=/vacancies/${item.id} target=_blank>${
-            item.name
-          }</a>`,
-          balloonContentBody: `${
-            item.employer.name
-          }<br><br><a href=/vacancies/${item.id} target=_blank>Подробнее</a>`,
-          balloonContentFooter:
-            (item.salary != null &&
-              (item.salary.from != null && `от ${item.salary.from}`)) ||
-            'з/п не указана',
-          clusterCaption: item.name,
-          hintContent: item.name,
+          balloonContentHeader: `
+            <a href=/vacancies/${item.get('id')}
+               target=_blank>
+              ${item.get('name')}
+            </a>
+          `,
+          balloonContentBody: `
+            ${item.getIn(['employer', 'name'])}
+            <br><br>
+            <a href=/vacancies/${item.get('id')}
+               target=_blank>
+              Подробнее
+            </a>
+          `,
+          balloonContentFooter: item.get('salary')
+            ? item.getIn(['salary', 'from']) && `от ${item.getIn(['salary', 'from'])}`
+            : 'з/п не указана',
+          clusterCaption: item.get('name'),
+          hintContent: item.get('name'),
         },
         options: {
           preset: 'islands#blueCircleDotIconWithCaption',
           iconCaptionMaxWidth: '100',
         },
-      }));
+      }))
+      .toJS();
     return (
       <YMaps>
         <Map
           state={mapState}
           width="100%"
           height={500}
-          onBoundsChange={this.onLoadMap}
+          onBoundsChange={this.onBoundsChange}
         >
           <Button
             data={{
@@ -104,8 +120,9 @@ class yaMap extends React.Component {
 }
 export default connect(
   state => ({
-    app: state.app,
-    map: state.ymap,
+    app: state.get('app'),
+    map: state.get('ymap'),
+    mapState: state.get('mapState'),
   }),
-  { loadMapData, changePage },
+  { loadMapData, changePage, updateYAMapState },
 )(yaMap);

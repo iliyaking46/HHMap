@@ -28,9 +28,13 @@ class Header extends Component {
   }
 
   searchHandler = () => {
-    const { searchText, metroId } = this.props.header;
+    const { header } = this.props;
+    const searchText = header.get('searchText');
+    const metroId = header.get('metroId');
+
     this.props.addGlobalData(metroId, searchText);
     this.props.history.push('/');
+
     switch (this.props.page) {
       case 'home':
         this.props.loadData(searchText, metroId);
@@ -44,16 +48,18 @@ class Header extends Component {
   };
 
   render() {
-    const { searchText, metroId, metro } = this.props.header;
-    const stations = metro
-      .map(line => [
-        { label: line.name, value: line.id },
-        ...line.stations.map(station => ({
-          label: station.name,
-          value: station.id,
-        })),
-      ])
-      .reduce((newArr, nextArr) => [...newArr, ...nextArr], []);
+    const { header } = this.props;
+    const searchText = header.get('searchText');
+    const metroId = header.get('metroId');
+    const metro = header.get('metro');
+
+    const stations = [];
+    for (const line of metro) {
+      stations.push({label: line.get('name'), value: line.get('id')});
+      for (const station of line.get('stations')) {
+        stations.push({label: station.get('name'), value: station.get('id')});
+      }
+    }
 
     return (
       <div className="row">
@@ -86,8 +92,8 @@ class Header extends Component {
 
 export default connect(
   state => ({
-    header: state.header,
-    page: state.app.currentPage,
+    header: state.get('header'),
+    page: state.getIn(['app', 'currentPage']),
   }),
   { addGlobalData, ...headerActions, loadData, loadMapData },
 )(Header);

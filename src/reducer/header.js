@@ -1,3 +1,4 @@
+import {fromJS} from 'immutable';
 import {
   LOAD_METRO,
   CHANGE_SELECTION,
@@ -7,36 +8,34 @@ import {
   FAIL,
 } from '../constants';
 
-const initialState = {
+const initialState = fromJS({
   searchText: '',
   metroId: '',
   metro: [],
   isLoad: false,
-};
+});
 
 export default (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
     case LOAD_METRO + START:
-      return { ...state, isLoad: payload.isLoad };
+      return state.setIn(['isLoad'], payload.isLoad);
 
     case LOAD_METRO + SUCCESS:
-      return {
-        ...state,
-        metroId: payload.metro[3].id,
-        metro: payload.metro,
-        isLoad: payload.isLoad,
-      };
+      return state
+        .setIn(['metroId'], payload.metro[3].id)
+        .setIn(['metro'], fromJS(payload.metro))
+        .setIn(['isLoad'], payload.isLoad)
 
     case LOAD_METRO + FAIL:
-      return { ...state, isLoad: false };
+      return state.setIn(['isLoad'], false);
 
     case CHANGE_SELECTION:
-      return { ...state, metroId: payload.selected };
+      return state.setIn(['metroId'], payload.selected);
 
     case CHANGE_SEARCHTEXT:
-      return { ...state, searchText: payload.text };
+      return state.setIn(['searchText'], payload.text);
 
     default:
       return state;
