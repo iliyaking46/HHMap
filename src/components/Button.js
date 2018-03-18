@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import pure from 'recompose/pure';
 
 const Button = ({ onClick, children }) => (
-  <button className="btn btn-primary mx-3" onClick={onClick}>
+  <button className="btn btn-outline-dark" onClick={onClick}>
     {children}
   </button>
 );

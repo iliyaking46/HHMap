@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route } from 'react-router-dom';
+import { Router, Switch, Route } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
 import JobsList from './JobsList';
 import VacancyPage from './VacancyPage';
@@ -9,23 +9,40 @@ import { CustomLink } from '../components/CustomLink';
 
 const history = createHistory();
 
-const App = () => {
-  const home = () => <JobsList />;
-  const map = () => <Map history={history} />;
-  return (
-    <Router history={history}>
-      <div className="container mt-5">
-        <h1 className="text-center">HH Map Jobs-Finder</h1>
+const home = () => (
+  <div className="main-page">
+    <div className="search-field">
+      <div className="container">
         <Header history={history} />
-        <nav className="nav nav-pills justify-content-center text-center my-3">
-          <CustomLink isExact to="/" label="Вакансии" />
-          <CustomLink isExact={false} to="/map" label="Карта" />
-        </nav>
-        <Route exact path="/" component={home} />
-        <Route path="/map" component={map} />
-        <Route path="/vacancies/:id" component={VacancyPage} />
       </div>
-    </Router>
-  );
-};
+    </div>
+  </div>
+);
+
+const MainLayout = props => (
+  <div className="container">
+    <Header history={history} />
+    <nav className="nav nav-pills justify-content-center text-center my-md-3">
+      <CustomLink isExact to="/vacancies" label="Вакансии" />
+      <CustomLink isExact={false} to="/map" label="Карта" />
+    </nav>
+    {/* eslint-disable-next-line */}
+    {props.children}
+  </div>
+);
+
+const App = () => (
+  <Router history={history}>
+    <div className="wrapper">
+      <Switch>
+        <Route exact path="/" component={home} />
+        <MainLayout>
+          <Route exact path="/vacancies" component={JobsList} />
+          <Route path="/map" component={Map} />
+          <Route path="/vacancies/:id" component={VacancyPage} />
+        </MainLayout>
+      </Switch>
+    </div>
+  </Router>
+);
 export default App;

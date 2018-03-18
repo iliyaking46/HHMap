@@ -1,24 +1,101 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+}
+body, #root, html, .wrapper {
+  height: 100%;
+  width: 100%
 }
 
 @media screen and (max-width: 700px) {
   .vacancy-sm-icon{
     max-width: 85px;
   }
-  
 }
-highlighttext {
-  font-weight: 600;
+
+.main-page {
+  width: 100%;
+  height: 100.1%;
+  position: relative;
+  opacity: 1;
+  transition: 1s;
 }
+
+.main-page::after {
+  content: "";
+  background: url('./slide.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 1;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+  transition: 1s;
+}
+
+.main-page.hide:after {
+  opacity: 0;
+}
+
+.search-field {
+  width: 100%;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: 1s;
+}
+
+.hide .search-field {
+  top: 0;
+  transform: translate(-50%, 0);
+}
+
+.search-field .main-heading {
+  color: #fff;
+  transition: 1s;
+}
+
+.hide .search-field .main-heading {
+  color: #212529;
+}
+
+.form-control:focus,
+.Select.is-focused:not(.is-open) > .Select-control {
+  color: #495057;
+  border-color: #ced4da!important;
+  background-color: #fff;
+  outline: 0!important;
+  box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.226)!important;
+}
+/* .search-field .form-control {
+  border-color: transparent;
+} */
+
+.btn-outline-dark {
+  border: 1px solid #ced4da;
+  background: #fff;
+}
+/* 
+.search-field .Select-control {
+  border-color: transparent;
+} */
+
 .Select-menu-outer {
   max-height: 350px!important;
 }
 .Select-menu {
   max-height: 348px!important;
 }
+
+highlighttext {
+  font-weight: 600;
+}
+
 .indicator {
   position: absolute;
   top: 50%;
