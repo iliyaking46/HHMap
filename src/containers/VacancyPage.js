@@ -70,7 +70,9 @@ class VacancyPage extends PureComponent {
         </p>
         {/* eslint-disable-next-line */}
         <p dangerouslySetInnerHTML={{ __html: `${vacancy.get('description')}` }} />
-        {vacancy.get('address') && <Map data={fromJS([vacancy])} />}
+        {vacancy.get('address') &&
+          vacancy.getIn(['address', 'lat']) &&
+          vacancy.getIn(['address', 'lng']) && <Map data={fromJS([vacancy])} />}
       </div>
     );
   }
