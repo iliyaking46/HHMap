@@ -24,15 +24,17 @@ export const JobItem = ({ item }) => (
           : ''}
       </h6>
       <h6 className="card-subtitle mb-2 text-muted">
-        З/п{item.get('salary')
-          ? (item.getIn(['salary', 'from'])
-              ? ` от ${item.getIn(['salary', 'from'])} `
-              : '') +
-            (item.getIn(['salary', 'from'])
-              ? ` до ${item.getIn(['salary', 'to'])} `
-              : '') +
-            item.getIn(['salary', 'currency'])
-          : ' не указана'}
+        {`З/п ${
+          item.get('salary')
+            ? (item.getIn(['salary', 'from'])
+                ? `от ${item.getIn(['salary', 'from'])} `
+                : '') +
+              (item.getIn(['salary', 'to'])
+                ? `до ${item.getIn(['salary', 'to'])} `
+                : '') +
+              item.getIn(['salary', 'currency'])
+            : 'не указана'
+        }`}
       </h6>
       <p
         className="card-text"
