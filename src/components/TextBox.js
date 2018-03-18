@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const TextBox = ({ onChange, onKeyDown, value = '' }) => (
   <input
     className="form-control"
-    placeholder="Введите значение"
+    placeholder="Название вакансии или ключевое слово"
     type="text"
     value={value}
     onKeyDown={e => onKeyDown(e)}

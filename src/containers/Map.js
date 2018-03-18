@@ -96,34 +96,36 @@ class yaMap extends PureComponent {
       }))
       .toJS();
     return (
-      <YMaps>
-        <Map
-          state={mapState}
-          width="100%"
-          height={500}
-          onBoundsChange={this.props.data ? null : this.onBoundsChange}
-        >
-          <Button
-            data={{
-              content: `Количество ваканский на карте ${ymapData.length}`,
-            }}
-            options={{ margin: 'auto', maxWidth: '600' }}
-          />
-          <ObjectManager
-            options={{
-              clusterize: true,
-              gridSize: 32,
-            }}
-            objects={{
-              preset: 'islands#blueDotIcon',
-            }}
-            clusters={{
-              preset: 'islands#blueClusterIcons',
-            }}
-            features={ymapData}
-          />
-        </Map>
-      </YMaps>
+      <div className="my-3">
+        <YMaps>
+          <Map
+            state={mapState}
+            width="100%"
+            height={500}
+            onBoundsChange={this.props.data ? null : this.onBoundsChange}
+          >
+            <Button
+              data={{
+                content: `Количество ваканский на карте ${ymapData.length}`,
+              }}
+              options={{ margin: 'auto', maxWidth: '600' }}
+            />
+            <ObjectManager
+              options={{
+                clusterize: true,
+                gridSize: 32,
+              }}
+              objects={{
+                preset: 'islands#blueDotIcon',
+              }}
+              clusters={{
+                preset: 'islands#blueClusterIcons',
+              }}
+              features={ymapData}
+            />
+          </Map>
+        </YMaps>
+      </div>
     );
   }
 }

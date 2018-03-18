@@ -24,7 +24,9 @@ class Header extends PureComponent {
   };
 
   componentDidMount() {
-    this.props.loadMetro();
+    if (!this.props.header.get('metro').size) {
+      this.props.loadMetro();
+    }
   }
 
   searchHandler = event => {
@@ -34,7 +36,7 @@ class Header extends PureComponent {
     const metroId = header.get('metroId');
 
     this.props.addGlobalData(metroId, searchText);
-    this.props.history.push('/');
+    this.props.history.push('/vacancies');
 
     switch (this.props.page) {
       case 'home':

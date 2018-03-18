@@ -1,24 +1,81 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+}
+body, #root, html, .wrapper {
+  height: 100%;
+  width: 100%
 }
 
 @media screen and (max-width: 700px) {
   .vacancy-sm-icon{
     max-width: 85px;
   }
-  
 }
+
+.main-page {
+  background: url('./slide.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.search-wrapper {
+  padding: 1rem;
+  border-radius: 5px;
+}
+
+.btn-outline-dark {
+  border: 1px solid #ced4da;
+}
+
+.search-field .btn-outline-dark:not(:hover) {
+  background: #fff;
+    border-color: transparent;
+}
+
+.search-field {
+  width: 100%;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.search-field .form-control:focus,
+.search-field .Select.is-focused:not(.is-open) > .Select-control {
+  color: #495057;
+  border-color: white;
+  background-color: #fff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.31);
+}
+.search-field .form-control {
+  border-color: transparent;
+}
+
+
 highlighttext {
   font-weight: 600;
 }
+
+
+
 .Select-menu-outer {
   max-height: 350px!important;
 }
 .Select-menu {
   max-height: 348px!important;
 }
+.search-field .Select-control {
+  border-color: transparent;
+}
+
+
+
 .indicator {
   position: absolute;
   top: 50%;

@@ -57,7 +57,7 @@ class JobsList extends PureComponent {
     const currPage =
       data.size > 0 ? data.find(item => item.get('page') === page) : 0;
     if (!isLoadData) {
-      return 'А ты поиск сначала сделай!';
+      return <h3 className="text-center my-5">Выполните поиск!</h3>;
     }
     return isLoad && currPage ? (
       <div className="mt-3">
