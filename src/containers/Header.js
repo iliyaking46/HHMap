@@ -27,7 +27,8 @@ class Header extends PureComponent {
     this.props.loadMetro();
   }
 
-  searchHandler = () => {
+  searchHandler = event => {
+    event.target.blur();
     const { header } = this.props;
     const searchText = header.get('searchText');
     const metroId = header.get('metroId');
@@ -78,7 +79,9 @@ class Header extends PureComponent {
         <div className="col-md mb-3">
           <TextBox
             onChange={text => this.props.changeTextSearch(text)}
-            onKeyDown={enter => enter && this.searchHandler()}
+            onKeyDown={event =>
+              event.key === 'Enter' && this.searchHandler(event)
+            }
             value={searchText}
           />
         </div>

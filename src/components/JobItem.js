@@ -36,23 +36,27 @@ export const JobItem = ({ item }) => (
       </h6>
       <p
         className="card-text"
+        /* eslint-disable */
         dangerouslySetInnerHTML={{
           __html:
-            window.innerWidth < 768
+            item.getIn(['snippet', 'requirement']) && window.innerWidth < 768
               ? `${item.getIn(['snippet', 'requirement']).substring(0, 70)}...`
               : item.getIn(['snippet', 'requirement']),
         }}
+        /* eslint-enable */
       />
       <p
         className="card-text"
+        /* eslint-disable */
         dangerouslySetInnerHTML={{
           __html:
             item.getIn(['snippet', 'responsibility']) && window.innerWidth < 768
               ? `${item
-                  .getIn(['snippet', 'responsibility'])
-                  .substring(0, 70)}...`
+                .getIn(['snippet', 'responsibility'])
+                .substring(0, 70)}...`
               : item.getIn(['snippet', 'responsibility']),
         }}
+      /* eslint-enable */
       />
     </div>
   </div>

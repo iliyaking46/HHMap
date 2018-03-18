@@ -31,7 +31,11 @@ class VacancyPage extends PureComponent {
       item => item.get('id') === this.props.match.params.id,
     );
     if (!isLoad || !vacancy) {
-      return loader;
+      return (
+        <div className="position-relative" style={{ minHeight: '150px' }}>
+          {loader}
+        </div>
+      );
     }
     return (
       <div className="mb-5">
@@ -66,8 +70,6 @@ class VacancyPage extends PureComponent {
         </p>
         {/* eslint-disable-next-line */}
         <p dangerouslySetInnerHTML={{ __html: `${vacancy.get('description')}` }} />
-
-        {/* {vacancy.get('address') && <Map data={fromJS([vacancy])} />} */}
         {vacancy.get('address') && <Map data={fromJS([vacancy])} />}
       </div>
     );
