@@ -14,27 +14,31 @@ body, #root, html, .wrapper {
 }
 
 .main-page {
+  width: 100%;
+  height: 100.1%;
+  position: relative;
+  opacity: 1;
+  transition: 1s;
+}
+
+.main-page::after {
+  content: "";
   background: url('./slide.jpg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  width: 100%;
-  height: 100%;
-  position: relative;
+  opacity: 1;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+  transition: 1s;
 }
 
-.search-wrapper {
-  padding: 1rem;
-  border-radius: 5px;
-}
-
-.btn-outline-dark {
-  border: 1px solid #ced4da;
-}
-
-.search-field .btn-outline-dark:not(:hover) {
-  background: #fff;
-    border-color: transparent;
+.main-page.hide:after {
+  opacity: 0;
 }
 
 .search-field {
@@ -43,26 +47,43 @@ body, #root, html, .wrapper {
   top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
+  transition: 1s;
 }
 
-.search-field .form-control:focus,
-.search-field .Select.is-focused:not(.is-open) > .Select-control {
+.hide .search-field {
+  top: 0;
+  transform: translate(-50%, 0);
+}
+
+.search-field .main-heading {
+  color: #fff;
+  transition: 1s;
+}
+
+.hide .search-field .main-heading {
+  color: #212529;
+}
+
+.form-control:focus,
+.Select.is-focused:not(.is-open) > .Select-control {
   color: #495057;
-  border-color: white;
+  border-color: #ced4da!important;
   background-color: #fff;
-  outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.31);
+  outline: 0!important;
+  box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.226)!important;
 }
-.search-field .form-control {
+/* .search-field .form-control {
   border-color: transparent;
+} */
+
+.btn-outline-dark {
+  border: 1px solid #ced4da;
+  background: #fff;
 }
-
-
-highlighttext {
-  font-weight: 600;
-}
-
-
+/* 
+.search-field .Select-control {
+  border-color: transparent;
+} */
 
 .Select-menu-outer {
   max-height: 350px!important;
@@ -70,11 +91,10 @@ highlighttext {
 .Select-menu {
   max-height: 348px!important;
 }
-.search-field .Select-control {
-  border-color: transparent;
+
+highlighttext {
+  font-weight: 600;
 }
-
-
 
 .indicator {
   position: absolute;

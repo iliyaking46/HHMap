@@ -13,12 +13,7 @@ const home = () => (
   <div className="main-page">
     <div className="search-field">
       <div className="container">
-        <div className="search-wrapper">
-          <h2 className="text-center mb-4 text-white">
-            Найди работу своей мечты
-          </h2>
-          <Header history={history} />
-        </div>
+        <Header history={history} />
       </div>
     </div>
   </div>
@@ -26,7 +21,6 @@ const home = () => (
 
 const MainLayout = props => (
   <div className="container">
-    <h2 className="text-center my-3 my-md-5">Найдите работу рядом с Вами!</h2>
     <Header history={history} />
     <nav className="nav nav-pills justify-content-center text-center my-md-3">
       <CustomLink isExact to="/vacancies" label="Вакансии" />
