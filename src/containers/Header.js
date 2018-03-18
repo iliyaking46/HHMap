@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -10,7 +10,7 @@ import { addGlobalData } from '../actions/main';
 import { loadMapData } from '../actions/map';
 import { loadData } from '../actions/table';
 
-class Header extends Component {
+class Header extends PureComponent {
   static propTypes = {
     loadMetro: PropTypes.func.isRequired,
     addGlobalData: PropTypes.func.isRequired,
@@ -27,10 +27,15 @@ class Header extends Component {
     this.props.loadMetro();
   }
 
-  searchHandler = () => {
-    const { searchText, metroId } = this.props.header;
+  searchHandler = event => {
+    event.target.blur();
+    const { header } = this.props;
+    const searchText = header.get('searchText');
+    const metroId = header.get('metroId');
+
     this.props.addGlobalData(metroId, searchText);
     this.props.history.push('/');
+
     switch (this.props.page) {
       case 'home':
         this.props.loadData(searchText, metroId);
@@ -44,16 +49,20 @@ class Header extends Component {
   };
 
   render() {
-    const { searchText, metroId, metro } = this.props.header;
-    const stations = metro
-      .map(line => [
-        { label: line.name, value: line.id },
-        ...line.stations.map(station => ({
-          label: station.name,
-          value: station.id,
-        })),
-      ])
-      .reduce((newArr, nextArr) => [...newArr, ...nextArr], []);
+    const { header } = this.props;
+    const searchText = header.get('searchText');
+    const metroId = header.get('metroId');
+    const metro = header.get('metro');
+
+    const stations = [];
+    /* eslint-disable */
+    for (const line of metro) {
+      stations.push({ label: line.get('name'), value: line.get('id') });
+      for (const station of line.get('stations')) {
+        stations.push({ label: station.get('name'), value: station.get('id') });
+      }
+    }
+    /* eslint-enable */
 
     return (
       <div className="row">
@@ -70,11 +79,13 @@ class Header extends Component {
         <div className="col-md mb-3">
           <TextBox
             onChange={text => this.props.changeTextSearch(text)}
-            onKeyDown={enter => enter && this.searchHandler()}
+            onKeyDown={event =>
+              event.key === 'Enter' && this.searchHandler(event)
+            }
             value={searchText}
           />
         </div>
-        <div className="col col-md-auto mb-3">
+        <div className="col col-md-auto mb-3 text-center">
           <Button className="mb-3" onClick={this.searchHandler}>
             Поиск
           </Button>
@@ -86,8 +97,8 @@ class Header extends Component {
 
 export default connect(
   state => ({
-    header: state.header,
-    page: state.app.currentPage,
+    header: state.get('header'),
+    page: state.getIn(['app', 'currentPage']),
   }),
   { addGlobalData, ...headerActions, loadData, loadMapData },
 )(Header);

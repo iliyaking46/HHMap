@@ -7,7 +7,7 @@ const TextBox = ({ onChange, onKeyDown, value = '' }) => (
     placeholder="Введите значение"
     type="text"
     value={value}
-    onKeyDown={e => onKeyDown(e.key === 'Enter')}
+    onKeyDown={e => onKeyDown(e)}
     onChange={e => onChange(e.target.value)}
   />
 );

@@ -1,8 +1,8 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux-immutable';
 import app from './app';
 import header from './header';
 import table from './table';
-import ymap from './ymap';
+import { ymap, mapState } from './ymap';
 import vacancyCard from './vacancyCard';
 
 export default combineReducers({
@@ -10,5 +10,6 @@ export default combineReducers({
   header,
   table,
   ymap,
+  mapState,
   vacancyCard,
 });

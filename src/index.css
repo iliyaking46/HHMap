@@ -4,6 +4,15 @@ body {
   font-family: sans-serif;
 }
 
+@media screen and (max-width: 700px) {
+  .vacancy-sm-icon{
+    max-width: 85px;
+  }
+  
+}
+highlighttext {
+  font-weight: 600;
+}
 .Select-menu-outer {
   max-height: 350px!important;
 }
