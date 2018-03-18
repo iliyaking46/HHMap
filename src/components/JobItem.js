@@ -5,41 +5,55 @@ import PropTypes from 'prop-types';
 export const JobItem = ({ item }) => (
   <div className="card mb-3">
     <div className="card-body">
-      {item.employer.logo_urls && (
+      {item.getIn(['employer', 'logo_urls']) && (
         <img
-          src={item.employer.logo_urls[90]}
+          src={item.getIn(['employer', 'logo_urls', '90'])}
           className="float-right vacancy-sm-icon"
-          alt={item.employer.name}
+          alt={item.getIn(['employer', 'name'])}
         />
       )}
       <h5 className="card-title">
-        <Link to={`/vacancies/${item.id}`} className="card-link">
-          {item.name}
+        <Link to={`vacancies/${item.get('id')}`} className="card-link">
+          {item.get('name')}
         </Link>
       </h5>
       <h6 className="card-subtitle mb-2 text-muted mb-3 mt-2">
-        {item.employer.name}
-        {item.address && item.address.metro
-          ? `, ${item.address.metro.station_name}`
+        {item.getIn(['employer', 'name'])}
+        {item.get('address') && item.getIn(['address', 'metro'])
+          ? `, ${item.getIn(['address', 'metro', 'station_name'])}`
           : ''}
       </h6>
       <h6 className="card-subtitle mb-2 text-muted">
-        З/п{item.salary
-          ? (item.salary.from ? ` от ${item.salary.from} ` : '') +
-            (item.salary.to ? ` до ${item.salary.to} ` : '') +
-            item.salary.currency
+        З/п{item.get('salary')
+          ? (item.getIn(['salary', 'from'])
+              ? ` от ${item.getIn(['salary', 'from'])} `
+              : '') +
+            (item.getIn(['salary', 'from'])
+              ? ` до ${item.getIn(['salary', 'to'])} `
+              : '') +
+            item.getIn(['salary', 'currency'])
           : ' не указана'}
       </h6>
-      <p className="card-text">
-        {window.innerWidth < 768
-          ? `${item.snippet.requirement.substring(0, 70)}...`
-          : item.snippet.requirement}
-      </p>
-      <p className="card-text">
-        {item.snippet.responsibility && window.innerWidth < 768
-          ? `${item.snippet.responsibility.substring(0, 70)}...`
-          : item.snippet.responsibility}
-      </p>
+      <p
+        className="card-text"
+        dangerouslySetInnerHTML={{
+          __html:
+            window.innerWidth < 768
+              ? `${item.getIn(['snippet', 'requirement']).substring(0, 70)}...`
+              : item.getIn(['snippet', 'requirement']),
+        }}
+      />
+      <p
+        className="card-text"
+        dangerouslySetInnerHTML={{
+          __html:
+            item.getIn(['snippet', 'responsibility']) && window.innerWidth < 768
+              ? `${item
+                  .getIn(['snippet', 'responsibility'])
+                  .substring(0, 70)}...`
+              : item.getIn(['snippet', 'responsibility']),
+        }}
+      />
     </div>
   </div>
 );

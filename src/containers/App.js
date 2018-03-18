@@ -2,9 +2,9 @@ import React from 'react';
 import { Router, Route } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
 import JobsList from './JobsList';
+import VacancyPage from './VacancyPage';
 import Header from './Header';
 import Map from './Map';
-import VacancyPage from './VacancyPage';
 import { CustomLink } from '../components/CustomLink';
 
 const history = createHistory();

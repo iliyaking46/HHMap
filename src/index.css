@@ -10,7 +10,9 @@ body {
   }
   
 }
-
+highlighttext {
+  font-weight: 600;
+}
 .Select-menu-outer {
   max-height: 350px!important;
 }

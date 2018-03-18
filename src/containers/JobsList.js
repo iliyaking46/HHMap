@@ -21,18 +21,23 @@ class JobsList extends PureComponent {
     this.props.changePage('home');
     // этот код для сверки с текущим состоянием, если есть какая
     //  то дата, которая уже была загружена, то не надо грузить еще раз
-    const { searchText, searchMetroId } = this.props.app;
+    const { app } = this.props;
+    const searchText = app.get('searchText');
+    const searchMetroId = app.get('searchMetroId');
+    const { table } = this.props;
     if (
-      searchText !== this.props.table.searchText ||
-      searchMetroId !== this.props.table.searchMetroId
+      searchText !== table.get('searchText') ||
+      searchMetroId !== table.get('searchMetroId')
     ) {
       this.props.loadData(searchText, searchMetroId);
     }
   }
 
   handlePageClick = ({ selected }) => {
-    const { address, data } = this.props.table;
-    const isDownload = data.find(item => item.page === selected);
+    const { table } = this.props;
+    const address = table.get('address');
+    const data = table.get('data');
+    const isDownload = data.find(item => item.get('page') === selected);
     window.scrollTo(0, 0);
     if (isDownload) {
       this.props.changeVacanciesPage(selected);
@@ -42,8 +47,15 @@ class JobsList extends PureComponent {
   };
 
   render() {
-    const { data, isLoadData, isLoad, found, page, pages } = this.props.table;
-    const currPage = data.find(item => item.page === page);
+    const { table } = this.props;
+    const data = table.get('data');
+    const isLoadData = table.get('isLoadData');
+    const isLoad = table.get('isLoad');
+    const found = table.get('found');
+    const page = table.get('page');
+    const pages = table.get('pages');
+    const currPage =
+      data.size > 0 ? data.find(item => item.get('page') === page) : 0;
     if (!isLoadData) {
       return 'А ты поиск сначала сделай!';
     }
@@ -51,10 +63,10 @@ class JobsList extends PureComponent {
       <div className="mt-3">
         <h3 className="text-center">Найдено {found} вакансий</h3>
 
-        {currPage.items.map(item => <JobItem item={item} key={item.id} />)}
+        {currPage
+          .get('items')
+          .map(item => <JobItem item={item} key={item.get('id')} />)}
 
-        {/* <td>{new Date(item.created_at).toLocaleString()}</td>
-          */}
         <div className="justify-content-center">
           <ReactPaginate
             previousLabel={'«'}
@@ -87,8 +99,8 @@ class JobsList extends PureComponent {
 }
 export default connect(
   state => ({
-    table: state.table,
-    app: state.app,
+    table: state.get('table'),
+    app: state.get('app'),
   }),
   { loadData, loadPage, changePage, changeVacanciesPage },
 )(JobsList);
