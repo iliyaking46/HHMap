@@ -13,7 +13,7 @@ export const JobItem = ({ item }) => (
         />
       )}
       <h5 className="card-title">
-        <Link to={`vacancies/${item.get('id')}`} className="card-link">
+        <Link to={`vacancy/${item.get('id')}`} className="card-link">
           {item.get('name')}
         </Link>
       </h5>

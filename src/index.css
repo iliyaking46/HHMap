@@ -15,10 +15,11 @@ body, #root, html, .wrapper {
 
 .main-page {
   width: 100%;
-  height: 100.1%;
+  height: 1px;
+  min-height: 100.1%;
   position: relative;
   opacity: 1;
-  transition: 1s;
+  transition: min-height 0s ease 0s;
 }
 
 .main-page::after {
@@ -37,31 +38,42 @@ body, #root, html, .wrapper {
   transition: 1s;
 }
 
-.main-page.hide:after {
+.main-page.hidden{
+  min-height: 0%;
+  transition: min-height 1s ease 1s;
+}
+
+.main-page.hide:after,
+.main-page.hidden:after {
   opacity: 0;
 }
 
 .search-field {
   width: 100%;
-  position: absolute;
+  position: relative;
   top: 30%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  transition: 1s;
+  transition:  1s;
 }
-
-.hide .search-field {
+.hidden .search-field {
   top: 0;
-  transform: translate(-50%, 0);
+  position: relative;
 }
-
 .search-field .main-heading {
   color: #fff;
   transition: 1s;
 }
-
-.hide .search-field .main-heading {
+.hidden .search-field .main-heading {
   color: #212529;
+}
+
+.main-layout{
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity .5s ease .8s, transform 1s ease .8s;
+} 
+.layout-show{
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .form-control:focus,
@@ -72,18 +84,11 @@ body, #root, html, .wrapper {
   outline: 0!important;
   box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.226)!important;
 }
-/* .search-field .form-control {
-  border-color: transparent;
-} */
 
 .btn-outline-dark {
   border: 1px solid #ced4da;
   background: #fff;
 }
-/* 
-.search-field .Select-control {
-  border-color: transparent;
-} */
 
 .Select-menu-outer {
   max-height: 350px!important;

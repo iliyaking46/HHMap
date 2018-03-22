@@ -6,21 +6,17 @@ import 'react-select/dist/react-select.css';
 import TextBox from '../components/TextBox';
 import Button from '../components/Button';
 import * as headerActions from '../actions/header';
-import { addGlobalData } from '../actions/main';
-import { loadMapData } from '../actions/map';
 import { loadData } from '../actions/table';
 
 class Header extends PureComponent {
   static propTypes = {
     loadMetro: PropTypes.func.isRequired,
-    addGlobalData: PropTypes.func.isRequired,
     loadData: PropTypes.func.isRequired,
-    loadMapData: PropTypes.func.isRequired,
+    // loadMapData: PropTypes.func.isRequired,
     changeSelection: PropTypes.func.isRequired,
     changeTextSearch: PropTypes.func.isRequired,
     history: PropTypes.objectOf(PropTypes.any).isRequired,
     header: PropTypes.objectOf(PropTypes.any).isRequired,
-    page: PropTypes.string.isRequired,
   };
 
   componentDidMount() {
@@ -34,29 +30,13 @@ class Header extends PureComponent {
     const { header } = this.props;
     const searchText = header.get('searchText');
     const metroId = header.get('metroId');
-
-    this.props.addGlobalData(metroId, searchText);
-
-    switch (this.props.page) {
-      case 'home':
-        this.props.loadData(searchText, metroId);
-        break;
-      case 'map':
-        this.props.loadMapData(searchText, metroId);
-        break;
-      default:
-        break;
-    }
-
-    const mainPage = document.getElementsByClassName('main-page')[0];
-    if (mainPage) {
-      mainPage.classList.add('hide');
-      setTimeout(() => {
-        this.props.history.push('/vacancies');
-      }, 1000);
-    } else {
-      this.props.history.push('/vacancies');
-    }
+    const paramsUrl = `?${
+      searchText ? `text=${searchText.split(' ').join('+')}` : ``
+    }${metroId ? `&metro=${metroId}` : ``}`;
+    this.props.history.push(`/vacancies${paramsUrl}`);
+    setTimeout(() => {
+      this.props.loadData(paramsUrl);
+    }, 700);
   };
 
   render() {
@@ -76,8 +56,8 @@ class Header extends PureComponent {
     /* eslint-enable */
 
     return (
-      <div>
-        <h2 className="text-center my-4 main-heading">
+      <div className="container">
+        <h2 className="text-center py-4 main-heading">
           Найди работу своей мечты
         </h2>
         <div className="row">
@@ -114,7 +94,6 @@ class Header extends PureComponent {
 export default connect(
   state => ({
     header: state.get('header'),
-    page: state.getIn(['app', 'currentPage']),
   }),
-  { addGlobalData, ...headerActions, loadData, loadMapData },
+  { ...headerActions, loadData },
 )(Header);

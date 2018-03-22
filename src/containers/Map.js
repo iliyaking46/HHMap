@@ -4,27 +4,21 @@ import { YMaps, Map, ObjectManager, Button } from 'react-yandex-maps';
 import PropTypes from 'prop-types';
 
 import { loadMapData, updateYAMapState } from '../actions/map';
-import { changePage } from '../actions/main';
 
 class yaMap extends PureComponent {
   static propTypes = {
-    app: PropTypes.objectOf(PropTypes.any).isRequired,
     map: PropTypes.objectOf(PropTypes.any).isRequired,
-    mapState: PropTypes.objectOf(PropTypes.any).isRequired,
-    // eslint-disable-next-line
+    mapState: PropTypes.objectOf(PropTypes.any).isRequired, // eslint-disable-next-line
+    location: PropTypes.objectOf(PropTypes.any), // eslint-disable-next-line
     data: PropTypes.objectOf(PropTypes.any),
-    changePage: PropTypes.func.isRequired,
     loadMapData: PropTypes.func.isRequired,
     updateYAMapState: PropTypes.func.isRequired,
   };
   componentDidMount() {
     if (!this.props.data) {
-      this.props.changePage('map');
       this.props.updateYAMapState([55.76, 37.64], 10);
-      const { app } = this.props;
-      const searchMetroId = app.get('searchMetroId');
-      const searchText = app.get('searchText');
-      this.props.loadMapData(searchText, searchMetroId);
+      const params = this.props.location.search;
+      this.props.loadMapData(params);
     } else {
       const coords = [
         this.props.data.get(0).getIn(['address', 'lat']),
@@ -35,16 +29,13 @@ class yaMap extends PureComponent {
   }
 
   onBoundsChange = event => {
-    const { app } = this.props;
-    const searchMetroId = app.get('searchMetroId');
-    const searchText = app.get('searchText');
-
+    const params = this.props.location.search;
     const map = event.get('map');
     const coords = map.getBounds();
     const center = map.getCenter();
     const zoom = map.getZoom();
     this.props.updateYAMapState(center, zoom);
-    this.props.loadMapData(searchText, searchMetroId, coords);
+    this.props.loadMapData(params, coords);
   };
 
   render() {
@@ -69,7 +60,7 @@ class yaMap extends PureComponent {
         },
         properties: {
           balloonContentHeader: `
-            <a href=/vacancies/${item.get('id')}
+            <a href=/vacancy/${item.get('id')}
                target=_blank>
               ${item.get('name')}
             </a>
@@ -77,7 +68,7 @@ class yaMap extends PureComponent {
           balloonContentBody: `
             ${item.getIn(['employer', 'name'])}
             <br><br>
-            <a href=/vacancies/${item.get('id')}
+            <a href=/vacancy/${item.get('id')}
                target=_blank>
               Подробнее
             </a>
@@ -135,5 +126,5 @@ export default connect(
     map: state.get('ymap'),
     mapState: state.get('mapState'),
   }),
-  { loadMapData, changePage, updateYAMapState },
+  { loadMapData, updateYAMapState },
 )(yaMap);

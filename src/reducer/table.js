@@ -15,9 +15,7 @@ const initialState = fromJS({
   found: '',
   page: 0,
   pages: 0,
-  address: '',
-  searchText: '',
-  searchMetroId: '',
+  params: '',
 });
 
 export default (state = initialState, { type, payload }) => {
@@ -41,9 +39,7 @@ export default (state = initialState, { type, payload }) => {
         found: payload.found,
         page: payload.page,
         pages: payload.pages,
-        address: payload.address,
-        searchText: payload.searchText,
-        searchMetroId: payload.searchMetroId,
+        params: payload.params,
       });
 
     case LOAD_TABLE_DATA + FAIL:

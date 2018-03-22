@@ -5,44 +5,35 @@ import ReactPaginate from 'react-paginate';
 import { loader } from '../helpers';
 import { JobItem } from '../components/JobItem';
 import { loadData, loadPage, changeVacanciesPage } from '../actions/table';
-import { changePage } from '../actions/main';
 
 class JobsList extends PureComponent {
   static propTypes = {
-    app: PropTypes.objectOf(PropTypes.any).isRequired,
     table: PropTypes.objectOf(PropTypes.any).isRequired,
+    location: PropTypes.objectOf(PropTypes.any).isRequired,
     loadData: PropTypes.func.isRequired,
     changeVacanciesPage: PropTypes.func.isRequired,
     loadPage: PropTypes.func.isRequired,
-    changePage: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
-    this.props.changePage('home');
-    // этот код для сверки с текущим состоянием, если есть какая
-    //  то дата, которая уже была загружена, то не надо грузить еще раз
-    const { app } = this.props;
-    const searchText = app.get('searchText');
-    const searchMetroId = app.get('searchMetroId');
+    const params = this.props.location.search;
     const { table } = this.props;
-    if (
-      searchText !== table.get('searchText') ||
-      searchMetroId !== table.get('searchMetroId')
-    ) {
-      this.props.loadData(searchText, searchMetroId);
+    if (params !== table.get('params') && !table.get('isLoadData')) {
+      // console.log(params, this.props.table.get('params'), 'from mount');
+      this.props.loadData(params);
     }
   }
 
   handlePageClick = ({ selected }) => {
     const { table } = this.props;
-    const address = table.get('address');
+    const params = this.props.location.search;
     const data = table.get('data');
     const isDownload = data.find(item => item.get('page') === selected);
     window.scrollTo(0, 0);
     if (isDownload) {
       this.props.changeVacanciesPage(selected);
     } else {
-      this.props.loadPage(address, selected);
+      this.props.loadPage(params, selected);
     }
   };
 
@@ -59,6 +50,7 @@ class JobsList extends PureComponent {
     if (!isLoadData) {
       return <h3 className="text-center my-5">Выполните поиск!</h3>;
     }
+
     return isLoad && currPage ? (
       <div className="mt-3">
         <h3 className="text-center">Найдено {found} вакансий</h3>
@@ -100,7 +92,6 @@ class JobsList extends PureComponent {
 export default connect(
   state => ({
     table: state.get('table'),
-    app: state.get('app'),
   }),
-  { loadData, loadPage, changePage, changeVacanciesPage },
+  { loadData, loadPage, changeVacanciesPage },
 )(JobsList);

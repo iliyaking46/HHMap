@@ -9,39 +9,58 @@ import { CustomLink } from '../components/CustomLink';
 
 const history = createHistory();
 
-const home = () => (
-  <div className="main-page">
-    <div className="search-field">
-      <div className="container">
-        <Header history={history} />
-      </div>
-    </div>
+const MainLayout = () => (
+  <div
+    className={`container main-layout ${
+      history.location.pathname !== '/' ? `layout-show` : `0`
+    } `}
+  >
+    <nav className="nav nav-pills justify-content-center text-center my-md-3">
+      <CustomLink
+        to={`/vacancies`}
+        isExact
+        params={history.location.search}
+        label="Вакансии"
+      />
+      <CustomLink
+        to={`/map`}
+        isExact
+        params={history.location.search}
+        label="Карта"
+      />
+    </nav>
+    <Route exact path="/vacancies" component={JobsList} />
+    <Route exact path="/map" component={Map} />
   </div>
 );
 
-const MainLayout = props => (
-  <div className="container">
-    <Header history={history} />
-    <nav className="nav nav-pills justify-content-center text-center my-md-3">
-      <CustomLink isExact to="/vacancies" label="Вакансии" />
-      <CustomLink isExact={false} to="/map" label="Карта" />
-    </nav>
-    {/* eslint-disable-next-line */}
-    {props.children}
+const home = () => (
+  <div
+    className={
+      history.location.pathname !== '/' ? `main-page hidden` : `main-page`
+    }
+  >
+    <div className="search-field">
+      <Header history={history} />
+    </div>
+    <div
+      className={`container main-layout ${
+        history.location.pathname !== '/' ? `layout-show` : `0`
+      } `}
+    >
+      <Switch>
+        <Route exact path="/vacancies" component={MainLayout} />
+        <Route exact path="/map" component={MainLayout} />
+        <Route path="/vacancy/:id" component={VacancyPage} />
+      </Switch>
+    </div>
   </div>
 );
 
 const App = () => (
   <Router history={history}>
     <div className="wrapper">
-      <Switch>
-        <Route exact path="/" component={home} />
-        <MainLayout>
-          <Route exact path="/vacancies" component={JobsList} />
-          <Route path="/map" component={Map} />
-          <Route path="/vacancies/:id" component={VacancyPage} />
-        </MainLayout>
-      </Switch>
+      <Route path="/" component={home} />
     </div>
   </Router>
 );
