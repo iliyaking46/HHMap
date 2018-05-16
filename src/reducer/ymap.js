@@ -33,7 +33,6 @@ export const ymap = (state = initialMapData, { type, payload }) => {
 const initialMapState = fromJS({
   center: [55.76, 37.64],
   zoom: 10,
-  controls: [],
 });
 
 export const mapState = (state = initialMapState, { type, payload }) => {

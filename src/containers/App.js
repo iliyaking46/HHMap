@@ -1,31 +1,28 @@
 import React from 'react';
-import { Router, Switch, Route } from 'react-router-dom';
-import createHistory from 'history/createBrowserHistory';
+import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 import JobsList from './JobsList';
 import VacancyPage from './VacancyPage';
 import Header from './Header';
 import Map from './Map';
 import { CustomLink } from '../components/CustomLink';
 
-const history = createHistory();
-
-const MainLayout = () => (
+const MainLayout = props => (
   <div
     className={`container main-layout ${
-      history.location.pathname !== '/' ? `layout-show` : `0`
+      props.location.pathname !== '/' ? `layout-show` : ``
     } `}
   >
     <nav className="nav nav-pills justify-content-center text-center my-md-3">
       <CustomLink
         to={`/vacancies`}
         isExact
-        params={history.location.search}
+        params={props.history.location.search}
         label="Вакансии"
       />
       <CustomLink
         to={`/map`}
         isExact
-        params={history.location.search}
+        params={props.history.location.search}
         label="Карта"
       />
     </nav>
@@ -34,19 +31,18 @@ const MainLayout = () => (
   </div>
 );
 
-const home = () => (
+const Home = props => (
   <div
     className={
-      history.location.pathname !== '/' ? `main-page hidden` : `main-page`
+      props.location.pathname !== '/' ? `main-page hidden` : `main-page`
     }
   >
     <div className="search-field">
-      <Header history={history} />
+      <Header history={props.history}/>
     </div>
     <div
-      className={`container main-layout ${
-        history.location.pathname !== '/' ? `layout-show` : `0`
-      } `}
+      className={`container main-layout
+      ${props.location.pathname !== '/' ? `layout-show` : ``}`}
     >
       <Switch>
         <Route exact path="/vacancies" component={MainLayout} />
@@ -58,9 +54,9 @@ const home = () => (
 );
 
 const App = () => (
-  <Router history={history}>
+  <Router>
     <div className="wrapper">
-      <Route path="/" component={home} />
+      <Route path="/" component={Home} />
     </div>
   </Router>
 );

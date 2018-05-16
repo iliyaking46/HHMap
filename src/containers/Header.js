@@ -12,7 +12,6 @@ class Header extends PureComponent {
   static propTypes = {
     loadMetro: PropTypes.func.isRequired,
     loadData: PropTypes.func.isRequired,
-    // loadMapData: PropTypes.func.isRequired,
     changeSelection: PropTypes.func.isRequired,
     changeTextSearch: PropTypes.func.isRequired,
     history: PropTypes.objectOf(PropTypes.any).isRequired,
@@ -27,16 +26,16 @@ class Header extends PureComponent {
 
   searchHandler = event => {
     event.target.blur();
-    const { header } = this.props;
+    const { header, history, loadData } = this.props;
     const searchText = header.get('searchText');
     const metroId = header.get('metroId');
     const paramsUrl = `?${
-      searchText ? `text=${searchText.split(' ').join('+')}` : ``
-    }${metroId ? `&metro=${metroId}` : ``}`;
-    this.props.history.push(`/vacancies${paramsUrl}`);
-    setTimeout(() => {
-      this.props.loadData(paramsUrl);
-    }, 700);
+      searchText ? `text=${searchText.split(' ').join('+')}&` : ``
+    }${metroId ? `metro=${metroId}` : ``}`;
+    history.push(`/vacancies${paramsUrl}`);
+    if (history.location.pathname === '/vacancies') {
+      loadData(paramsUrl);
+    }
   };
 
   render() {
@@ -57,7 +56,7 @@ class Header extends PureComponent {
 
     return (
       <div className="container">
-        <h2 className="text-center py-4 main-heading">
+        <h2 className="text-center py-4 main-heading " onClick={() => this.props.history.push('/')}>
           Найди работу своей мечты
         </h2>
         <div className="row">

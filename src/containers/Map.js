@@ -17,7 +17,7 @@ class yaMap extends PureComponent {
   componentDidMount() {
     if (!this.props.data) {
       this.props.updateYAMapState([55.76, 37.64], 10);
-      const params = this.props.location.search;
+      const params = decodeURIComponent(this.props.location.search);
       this.props.loadMapData(params);
     } else {
       const coords = [
@@ -41,14 +41,11 @@ class yaMap extends PureComponent {
   render() {
     const mapState = this.props.mapState.toJS();
     const data = this.props.data || this.props.map.get('data');
-    const ymapData = data
-      .filter(
+    const ymapData = data.filter(
         item =>
-          item.get('address') &&
           item.getIn(['address', 'lat']) &&
           item.getIn(['address', 'lng']),
-      )
-      .map(item => ({
+      ).map(item => ({
         type: 'Feature',
         id: item.get('id'),
         geometry: {

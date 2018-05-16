@@ -39,7 +39,7 @@ body, #root, html, .wrapper {
 }
 
 .main-page.hidden{
-  min-height: 0%;
+  min-height: 0;
   transition: min-height 1s ease 1s;
 }
 
@@ -61,6 +61,7 @@ body, #root, html, .wrapper {
 .search-field .main-heading {
   color: #fff;
   transition: 1s;
+  cursor: pointer;
 }
 .hidden .search-field .main-heading {
   color: #212529;
@@ -97,7 +98,7 @@ body, #root, html, .wrapper {
   max-height: 348px!important;
 }
 
-highlighttext {
+.highlighttext {
   font-weight: 600;
 }
 
