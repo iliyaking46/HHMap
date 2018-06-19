@@ -6,21 +6,21 @@ import Header from './Header';
 import Map from './Map';
 import { CustomLink } from '../components/CustomLink';
 
-const MainLayout = props => (
+const MainLayout = props => {
+  const isRoot = props.location.pathname !== '/';
+  return (
   <div
-    className={`container main-layout ${
-      props.location.pathname !== '/' ? `layout-show` : ``
-    } `}
+    className={`container main-layout${isRoot ? ` layout-show` : ``}`}
   >
     <nav className="nav nav-pills justify-content-center text-center my-md-3">
       <CustomLink
-        to={`/vacancies`}
+        to="/vacancies"
         isExact
         params={props.history.location.search}
         label="Вакансии"
       />
       <CustomLink
-        to={`/map`}
+        to="/map"
         isExact
         params={props.history.location.search}
         label="Карта"
@@ -29,20 +29,19 @@ const MainLayout = props => (
     <Route exact path="/vacancies" component={JobsList} />
     <Route exact path="/map" component={Map} />
   </div>
-);
+)};
 
-const Home = props => (
+const Home = props => {
+  const isRoot = props.location.pathname !== '/';
+  return (
   <div
-    className={
-      props.location.pathname !== '/' ? `main-page hidden` : `main-page`
-    }
+    className={`main-page${isRoot ? ' hidden' : ''}`}
   >
     <div className="search-field">
-      <Header history={props.history}/>
+      <Header history={props}/>
     </div>
     <div
-      className={`container main-layout
-      ${props.location.pathname !== '/' ? `layout-show` : ``}`}
+      className={`container main-layout${isRoot ? ' layout-show' : ''}`}
     >
       <Switch>
         <Route exact path="/vacancies" component={MainLayout} />
@@ -51,7 +50,7 @@ const Home = props => (
       </Switch>
     </div>
   </div>
-);
+)};
 
 const App = () => (
   <Router>

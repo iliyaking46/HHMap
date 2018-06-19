@@ -7,6 +7,7 @@ import TextBox from '../components/TextBox';
 import Button from '../components/Button';
 import * as headerActions from '../actions/header';
 import { loadData } from '../actions/table';
+import { parseQuery } from "../helpers";
 
 class Header extends PureComponent {
   static propTypes = {
@@ -14,27 +15,38 @@ class Header extends PureComponent {
     loadData: PropTypes.func.isRequired,
     changeSelection: PropTypes.func.isRequired,
     changeTextSearch: PropTypes.func.isRequired,
-    history: PropTypes.objectOf(PropTypes.any).isRequired,
-    header: PropTypes.objectOf(PropTypes.any).isRequired,
+    history: PropTypes.objectOf(PropTypes.any),
+    header: PropTypes.objectOf(PropTypes.any),
   };
 
   componentDidMount() {
     if (!this.props.header.get('metro').size) {
       this.props.loadMetro();
     }
+    const { history: {history}, changeSelection, changeTextSearch } = this.props;
+    const {metro, text} = parseQuery(history.location.search);
+    metro && changeSelection(metro);
+    text && changeTextSearch(text);
   }
 
   searchHandler = event => {
     event.target.blur();
-    const { header, history, loadData } = this.props;
+    const { header, history: {history}, loadData } = this.props;
     const searchText = header.get('searchText');
     const metroId = header.get('metroId');
-    const paramsUrl = `?${
-      searchText ? `text=${searchText.split(' ').join('+')}&` : ``
-    }${metroId ? `metro=${metroId}` : ``}`;
-    history.push(`/vacancies${paramsUrl}`);
-    if (history.location.pathname === '/vacancies') {
-      loadData(paramsUrl);
+    const paramsUrl = `?${searchText ? `text=${searchText.split(' ').join('+')}&` : ``}${metroId ? `metro=${metroId}` : ``}`;
+    if (history.location.search !== paramsUrl) {
+      loadData(paramsUrl, () => history.push(`/vacancies${paramsUrl}`))
+    }
+  };
+
+  pushRoot = () => {
+    const {
+      location: {pathname},
+      history: {push}
+    } = this.props.history;
+    if (pathname !== "/") {
+      push("/")
     }
   };
 
@@ -56,7 +68,7 @@ class Header extends PureComponent {
 
     return (
       <div className="container">
-        <h2 className="text-center py-4 main-heading " onClick={() => this.props.history.push('/')}>
+        <h2 className="text-center py-4 main-heading " onClick={this.pushRoot}>
           Найди работу своей мечты
         </h2>
         <div className="row">

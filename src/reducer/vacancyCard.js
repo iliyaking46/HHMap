@@ -14,12 +14,15 @@ export default (state = initialState, { type, payload }) => {
     case LOAD_VACANCY + SUCCESS:
       return state
         .setIn(['isLoad'], payload.isLoad)
+        .setIn(['error'], null)
         .updateIn(['vacancies'], vacanciesArr =>
           vacanciesArr.push(fromJS(payload.vacancy)),
         );
 
     case LOAD_VACANCY + FAIL:
-      return state.setIn(['isLoad'], payload.isLoad);
+      return state
+        .setIn(['isLoad'], payload.isLoad)
+        .setIn(['error'], payload.error);
 
     default:
       return state;

@@ -4,7 +4,7 @@ import table from './table';
 import { ymap, mapState } from './ymap';
 import vacancyCard from './vacancyCard';
 
-export default combineReducers({
+export const Reducers = combineReducers({
   header,
   table,
   ymap,

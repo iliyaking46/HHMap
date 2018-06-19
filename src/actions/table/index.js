@@ -7,15 +7,16 @@ import {
   FAIL,
 } from '../../constants';
 
-export function loadData(params) {
+export function loadData(params, push) {
   return dispatch => {
     dispatch({
       type: LOAD_TABLE_DATA + START,
       payload: { data: [], isLoad: false, isLoadData: true },
     });
-    const baseUrl = `https://api.hh.ru/vacancies${params}&area=1`;
+    const baseUrl = `https://api.hh.ru/vacancies${params ? params : '?'}&area=1`;
     fetch(`${baseUrl}`)
       .then(resp => {
+        push && push();
         if (resp.ok) {
           return resp.json();
         }
@@ -33,13 +34,16 @@ export function loadData(params) {
             pages: data.pages,
             params,
           },
-        }),
+        })
       )
       .catch(error =>
         dispatch({
           type: LOAD_TABLE_DATA + FAIL,
-          payload: { error },
-        }),
+          payload: {
+            isLoad: true,
+            error
+          },
+        })
       );
   };
 }
@@ -78,7 +82,10 @@ export function loadPage(params, page) {
       .catch(error => {
         dispatch({
           type: LOAD_PAGE_TABLE_DATA + FAIL,
-          payload: { error },
+          payload: {
+            isLoad: true,
+            error
+          },
         });
       });
   };

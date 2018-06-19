@@ -25,20 +25,47 @@ class VacancyPage extends PureComponent {
     }
   }
 
+  renderBack = () => {
+    return (
+      <button
+      className="btn btn-outline-dark mb-2 d-none d-lg-block"
+      onClick={() => this.props.history.goBack()}
+      >
+        Назад
+      </button>
+    )
+  };
+
   render() {
-    const { vacancies, isLoad } = this.props;
+    const { vacancies, isLoad, error } = this.props;
     const vacancy = vacancies.find(
       item => item.get('id') === this.props.match.params.id,
     );
-    if (!isLoad || !vacancy) {
+    if (!isLoad) {
       return (
         <div className="position-relative" style={{ minHeight: '150px' }}>
           {loader}
         </div>
       );
     }
+
+    if (error || !vacancy) {
+      return (
+        <div className="text-center my-3">
+          <h4>Ошибка, что пошло не так...</h4>
+          <button
+            className="btn btn-outline-dark my-3"
+            onClick={() => this.props.history.push('/')}
+          >
+            На главную
+          </button>
+        </div>
+      )
+    }
+
     return (
       <div className="mb-5">
+        {this.renderBack()}
         <h3>{vacancy.get('name')}</h3>
         {vacancy.getIn(['employer', 'logo_urls']) && (
           <img
@@ -77,10 +104,12 @@ class VacancyPage extends PureComponent {
     );
   }
 }
+
 export default connect(
   state => ({
     vacancies: state.getIn(['vacancyCard', 'vacancies']),
     isLoad: state.getIn(['vacancyCard', 'isLoad']),
+    error: state.getIn(['vacancyCard', 'error']),
   }),
   { loadVacancy },
 )(VacancyPage);

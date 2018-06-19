@@ -24,7 +24,7 @@ export function loadVacancy(vacancyId) {
       .catch(error =>
         dispatch({
           type: LOAD_VACANCY + FAIL,
-          payload: { isLoad: false, error },
+          payload: { isLoad: true, error },
         }),
       );
   };

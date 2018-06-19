@@ -3,7 +3,7 @@ body {
   padding: 0;
 }
 body, #root, html, .wrapper {
-  height: 100%;
+  height: 100.02%;
   width: 100%
 }
 
@@ -24,9 +24,7 @@ body, #root, html, .wrapper {
 
 .main-page::after {
   content: "";
-  background: url('./slide.jpg');
-  background-position: center;
-  background-repeat: no-repeat;
+  background: url('./slide.jpg') center no-repeat;
   background-size: cover;
   opacity: 1;
   top: 0;
@@ -35,7 +33,8 @@ body, #root, html, .wrapper {
   right: 0;
   position: absolute;
   z-index: -1;
-  transition: 1s;
+  transition: 1s .3s;
+  will-change: opacity;
 }
 
 .main-page.hidden{
@@ -46,35 +45,44 @@ body, #root, html, .wrapper {
 .main-page.hide:after,
 .main-page.hidden:after {
   opacity: 0;
+  transition: 1s 0s;
+  will-change: opacity;
 }
 
 .search-field {
   width: 100%;
   position: relative;
-  top: 30%;
-  transition:  1s;
+  top: 20%;
+  will-change: top;
+  transition: 1s 0s;
 }
 .hidden .search-field {
   top: 0;
+  will-change: top;
   position: relative;
+  transition: 1s .3s;
 }
 .search-field .main-heading {
   color: #fff;
-  transition: 1s;
+  transition: 1s .3s;
   cursor: pointer;
 }
+
 .hidden .search-field .main-heading {
+  transition: 1s 0s;
   color: #212529;
 }
 
 .main-layout{
   opacity: 0;
   transform: translateY(30px);
-  transition: opacity .5s ease .8s, transform 1s ease .8s;
-} 
+  transition: opacity .5s ease 1s, transform 1s ease 1s;
+}
+
 .layout-show{
   opacity: 1;
   transform: translateY(0);
+
 }
 
 .form-control:focus,
@@ -98,7 +106,7 @@ body, #root, html, .wrapper {
   max-height: 348px!important;
 }
 
-.highlighttext {
+.highlight-text {
   font-weight: 600;
 }
 

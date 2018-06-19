@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import {fromJS} from 'immutable';
-import rootReducer from 'reducer';
+import {Reducers as rootReducer} from '../reducer';
 
 export default function configureStore(initialState = {}) {
   const middlewares = [ReduxThunk];

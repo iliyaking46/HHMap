@@ -24,7 +24,6 @@ export default (state = initialState, action) => {
 
     case LOAD_METRO + SUCCESS:
       return state
-        .setIn(['metroId'], payload.metro[3].id)
         .setIn(['metro'], fromJS(payload.metro))
         .setIn(['isLoad'], payload.isLoad);
 

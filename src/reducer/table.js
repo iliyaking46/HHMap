@@ -28,6 +28,7 @@ export default (state = initialState, { type, payload }) => {
 
     case LOAD_TABLE_DATA + SUCCESS:
       return fromJS({
+        errors: null,
         data: [
           {
             items: payload.data,
@@ -43,7 +44,9 @@ export default (state = initialState, { type, payload }) => {
       });
 
     case LOAD_TABLE_DATA + FAIL:
-      return state.setIn(['isLoad'], false);
+      return state
+        .setIn(['isLoad'], payload.isLoad)
+        .setIn(['error'], payload.error);
 
     // Reducer for adding page
 
@@ -64,7 +67,9 @@ export default (state = initialState, { type, payload }) => {
         );
 
     case LOAD_PAGE_TABLE_DATA + FAIL:
-      return state.setIn(['isLoad'], false);
+      return state
+        .setIn(['isLoad'], payload.isLoad)
+        .setIn(['error'], payload.error);
 
     case CHANGE_VACANCIES_PAGE:
       return state.setIn(['page'], payload.page);

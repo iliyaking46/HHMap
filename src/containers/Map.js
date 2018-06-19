@@ -57,15 +57,14 @@ class yaMap extends PureComponent {
         },
         properties: {
           balloonContentHeader: `
-            <a href=/vacancy/${item.get('id')}
-               target=_blank>
+            <a href="#/vacancy/${item.get('id')}">
               ${item.get('name')}
             </a>
           `,
           balloonContentBody: `
             ${item.getIn(['employer', 'name'])}
             <br><br>
-            <a href=/vacancy/${item.get('id')}
+            <a href="#/vacancy/${item.get('id')}"
                target=_blank>
               Подробнее
             </a>

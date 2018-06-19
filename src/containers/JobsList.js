@@ -18,8 +18,11 @@ class JobsList extends PureComponent {
 
   componentDidMount() {
     const params = decodeURIComponent(this.props.location.search);
-    const { table } = this.props;
-    if (params !== table.get('params')) {
+    const tableParams = this.props.table.get('params');
+    const isLoadData = this.props.table.get('isLoadData');
+    const isLoad = this.props.table.get('isLoad');
+
+    if (params !== tableParams && isLoad && !isLoadData) {
       this.props.loadData(params);
     }
   }
@@ -37,61 +40,92 @@ class JobsList extends PureComponent {
     }
   };
 
-  render() {
+  renderLoader = () => (
+    <div className="position-relative" style={{ minHeight: '150px' }}>
+      {loader}
+    </div>
+  );
+
+  renderList = () => {
     const { table } = this.props;
     const data = table.get('data');
-    const isLoadData = table.get('isLoadData');
-    const isLoad = table.get('isLoad');
-    const found = table.get('found');
     const page = table.get('page');
     const pages = table.get('pages');
+    const found = table.get('found');
+
     const currPage =
       data.size > 0 ? data.find(item => item.get('page') === page) : 0;
+
+    return (
+      <div className="mt-3">
+        <h3 className="text-center">Найдено {found} вакансий</h3>
+        {currPage.get('items').map(item => <JobItem item={item} key={item.get('id')} />)}
+        <div className="justify-content-center">
+          <ReactPaginate
+            previousLabel={'«'}
+            nextLabel={'»'}
+            disableInitialCallback
+            breakLabel={<button className="page-link">...</button>}
+            breakClassName={'page-item'}
+            pageCount={pages}
+            initialPage={page}
+            marginPagesDisplayed={1}
+            pageRangeDisplayed={4}
+            onPageChange={this.handlePageClick}
+            containerClassName={'pagination justify-content-center'}
+            pageClassName={'page-item'}
+            previousClassName={'page-item'}
+            nextClassName={'page-item'}
+            pageLinkClassName={'page-link'}
+            previousLinkClassName={'page-link'}
+            nextLinkClassName={'page-link'}
+            activeClassName={'active'}
+          />
+        </div>
+      </div>
+    )
+  };
+
+  render() {
+    const { table } = this.props;
+    const isLoad = table.get('isLoad');
+    const isLoadData = table.get('isLoadData');
+    const error = table.get('error');
+
+    if (error) {
+      return (
+        <div className="text-center mt-4">
+          <h4>Ой, ошибочка...</h4>
+          <button
+            className="btn btn-outline-dark my-3"
+            onClick={() => this.props.history.push('/')}
+          >
+            На главную
+          </button>
+        </div>
+      )
+    }
+    if (!isLoad) {
+      return this.renderLoader()
+    }
+
     if (!isLoadData) {
       return <h3 className="text-center my-5">Выполните поиск!</h3>;
     }
 
-    return isLoad ? (
-      found ? (
-          <div className="mt-3">
-            <h3 className="text-center">Найдено {found} вакансий</h3>
-            {currPage.get('items').map(item => <JobItem item={item} key={item.get('id')} />)}
-            <div className="justify-content-center">
-              <ReactPaginate
-                previousLabel={'«'}
-                nextLabel={'»'}
-                disableInitialCallback
-                breakLabel={<button className="page-link">...</button>}
-                breakClassName={'page-item'}
-                pageCount={pages}
-                initialPage={page}
-                marginPagesDisplayed={1}
-                pageRangeDisplayed={4}
-                onPageChange={this.handlePageClick}
-                containerClassName={'pagination justify-content-center'}
-                pageClassName={'page-item'}
-                previousClassName={'page-item'}
-                nextClassName={'page-item'}
-                pageLinkClassName={'page-link'}
-                previousLinkClassName={'page-link'}
-                nextLinkClassName={'page-link'}
-                activeClassName={'active'}
-              />
-            </div>
+    const found = table.get('found');
+    if (!found) {
+      return (
+        <div className="mt-3">
+          <h3 className="text-center">Ууупс.. ничего не найдено</h3>
+          <div className="text-center">
+            <img src={noJobs} alt="no jobs"/>
           </div>
-        ) : (
-          <div className="mt-3">
-            <h3 className="text-center">Ууупс.. ничего не найдено</h3>
-            <div className="text-center">
-              <img src={noJobs} alt=""/>
-            </div>
-          </div>
-        )
-    ) : (
-      <div className="position-relative" style={{ minHeight: '150px' }}>
-        {loader}
-      </div>
-    );
+        </div>
+      )
+    }
+
+    return this.renderList()
   }
 }
 export default connect(
