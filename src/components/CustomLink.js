@@ -22,4 +22,3 @@ CustomLink.propTypes = {
   isExact: PropTypes.bool.isRequired,
   params: PropTypes.string.isRequired,
 };
-export default CustomLink;
