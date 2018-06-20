@@ -1,25 +1,24 @@
-body {
-  margin: 0;
-  padding: 0;
-}
-body, #root, html, .wrapper {
+html {
   height: 100.02%;
   width: 100%
 }
 
-@media screen and (max-width: 700px) {
-  .vacancy-sm-icon{
-    max-width: 85px;
-  }
+body {
+  margin: 0;
+  padding: 0;
 }
 
 .main-page {
   width: 100%;
-  height: 1px;
-  min-height: 100.1%;
+  min-height: 100.1vh;
   position: relative;
   opacity: 1;
   transition: min-height 0s ease 0s;
+}
+
+.main-page.hidden{
+  min-height: 0;
+  transition: min-height 0s ease 1s;
 }
 
 .main-page::after {
@@ -37,12 +36,6 @@ body, #root, html, .wrapper {
   will-change: opacity;
 }
 
-.main-page.hidden{
-  min-height: 0;
-  transition: min-height 1s ease 1s;
-}
-
-.main-page.hide:after,
 .main-page.hidden:after {
   opacity: 0;
   transition: 1s 0s;
@@ -51,17 +44,17 @@ body, #root, html, .wrapper {
 
 .search-field {
   width: 100%;
-  position: relative;
-  top: 20%;
-  will-change: top;
+  transform: translateY(200px);
+  will-change: transform;
   transition: 1s 0s;
 }
+
 .hidden .search-field {
-  top: 0;
-  will-change: top;
-  position: relative;
+  will-change: transform;
+  transform: translateY(0);
   transition: 1s .3s;
 }
+
 .search-field .main-heading {
   color: #fff;
   transition: 1s .3s;
@@ -75,14 +68,16 @@ body, #root, html, .wrapper {
 
 .main-layout{
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity .5s ease 1s, transform 1s ease 1s;
+  max-height: 0;
+  overflow: hidden;
+  transform: translateY(40px);
+  transition: opacity .7s ease 1s, transform 1s ease 1s, max-height 0s ease 1s;
 }
 
 .layout-show{
   opacity: 1;
+  max-height: 100%;
   transform: translateY(0);
-
 }
 
 .form-control:focus,
@@ -92,6 +87,23 @@ body, #root, html, .wrapper {
   background-color: #fff;
   outline: 0!important;
   box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.226)!important;
+}
+
+@media screen and (max-width: 700px) {
+  .vacancy-sm-icon{
+    max-width: 85px;
+  }
+
+  .search-field {
+    transform: translateY(50%);
+  }
+}
+
+
+@media screen and (max-height: 400px) {
+  .search-field {
+    transform: translateY(0px);
+  }
 }
 
 .btn-outline-dark {
@@ -106,31 +118,18 @@ body, #root, html, .wrapper {
   max-height: 348px!important;
 }
 
+.Select-placeholder{
+  color: #717171!important;
+}
+
+.Select-control {
+  height: 38px!important;
+}
+
 .highlight-text {
   font-weight: 600;
 }
 
-.indicator {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(2);
-}
-.indicator svg polyline {
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.indicator svg polyline#back {
-  stroke: rgba(59, 120, 211, 0.3);
-}
-.indicator svg polyline#front {
-  stroke: #2956d1;
-  stroke-dasharray: 12, 36;
-  stroke-dashoffset: 48;
-  animation: dash 1s linear infinite;
-}
 .cta {
   position: fixed;
   bottom: 20px;

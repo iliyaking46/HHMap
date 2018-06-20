@@ -36,7 +36,9 @@ class Header extends PureComponent {
     const metroId = header.get('metroId');
     const paramsUrl = `?${searchText ? `text=${searchText.split(' ').join('+')}&` : ``}${metroId ? `metro=${metroId}` : ``}`;
     if (history.location.search !== paramsUrl) {
-      loadData(paramsUrl, () => history.push(`/vacancies${paramsUrl}`))
+      // loadData(paramsUrl, () => history.push(`/vacancies${paramsUrl}`))
+      history.push(`/vacancies${paramsUrl}`);
+      loadData(paramsUrl);
     }
   };
 
@@ -45,8 +47,8 @@ class Header extends PureComponent {
       location: {pathname},
       history: {push}
     } = this.props.history;
-    if (pathname !== "/") {
-      push("/")
+    if (pathname !== '') {
+      push('/')
     }
   };
 
@@ -68,7 +70,7 @@ class Header extends PureComponent {
 
     return (
       <div className="container">
-        <h2 className="text-center py-4 main-heading " onClick={this.pushRoot}>
+        <h2 className="text-center py-2 py-md-4 main-heading" onClick={this.pushRoot}>
           Найди работу своей мечты
         </h2>
         <div className="row">
@@ -91,7 +93,7 @@ class Header extends PureComponent {
               value={searchText}
             />
           </div>
-          <div className="col col-md-auto mb-3 text-center">
+          <div className="col col-md-auto text-center">
             <Button className="mb-3" onClick={this.searchHandler}>
               Поиск
             </Button>

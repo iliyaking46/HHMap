@@ -52,7 +52,7 @@ class VacancyPage extends PureComponent {
     if (error || !vacancy) {
       return (
         <div className="text-center my-3">
-          <h4>Ошибка, что пошло не так...</h4>
+          <h4>Ошибка, что-то пошло не так...</h4>
           <button
             className="btn btn-outline-dark my-3"
             onClick={() => this.props.history.push('/')}
