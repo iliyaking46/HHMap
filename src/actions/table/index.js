@@ -34,16 +34,16 @@ export function loadData(params, push) {
             pages: data.pages,
             params,
           },
-        })
+        }),
       )
       .catch(error =>
         dispatch({
           type: LOAD_TABLE_DATA + FAIL,
           payload: {
             isLoad: true,
-            error
+            error,
           },
-        })
+        }),
       );
   };
 }
@@ -61,7 +61,7 @@ export function loadPage(params, page) {
       type: LOAD_PAGE_TABLE_DATA + START,
       payload: { isLoad: false },
     });
-    const baseUrl = `https://api.hh.ru/vacancies${params}&area=1&page=${page}`;
+    const baseUrl = `https://api.hh.ru/vacancies${params ? params : '?' }&area=1&page=${page}`;
     fetch(`${baseUrl}`)
       .then(resp => {
         if (resp.ok) {
@@ -84,7 +84,7 @@ export function loadPage(params, page) {
           type: LOAD_PAGE_TABLE_DATA + FAIL,
           payload: {
             isLoad: true,
-            error
+            error,
           },
         });
       });
