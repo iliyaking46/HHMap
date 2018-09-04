@@ -4,7 +4,7 @@ import {
   SUCCESS,
   FAIL,
   CHANGE_YMAP_STATE,
-} from '../../constants';
+} from '../constants';
 
 export function updateYAMapState(center, zoom) {
   return {

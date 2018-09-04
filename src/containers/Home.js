@@ -10,12 +10,10 @@ export const Home = props => {
     <div className="wrapper">
       <div className={`main-page${isRoot ? '' : ' hidden'}`}>
         <div className="search-field">
-          <Header history={props}/>
+          <Header history={props} />
         </div>
       </div>
-      <div
-        className={`container main-layout${isRoot ? '' : ' layout-show'}`}
-      >
+      <div className={`container main-layout${isRoot ? '' : ' layout-show'}`}>
         <Switch>
           <Route exact path="/vacancies" component={MainContent} />
           <Route exact path="/map" component={MainContent} />
@@ -23,5 +21,5 @@ export const Home = props => {
         </Switch>
       </div>
     </div>
-  )
+  );
 };

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { YMaps, Map, ObjectManager, Button } from 'react-yandex-maps';
 import PropTypes from 'prop-types';
 
-import { loadMapData, updateYAMapState } from '../actions/map';
+import { loadMapData, updateYAMapState } from '../actions';
 
 class yaMap extends PureComponent {
   static propTypes = {
@@ -14,6 +14,7 @@ class yaMap extends PureComponent {
     loadMapData: PropTypes.func.isRequired,
     updateYAMapState: PropTypes.func.isRequired,
   };
+
   componentDidMount() {
     if (!this.props.data) {
       this.props.updateYAMapState([55.76, 37.64], 10);
@@ -41,11 +42,12 @@ class yaMap extends PureComponent {
   render() {
     const mapState = this.props.mapState.toJS();
     const data = this.props.data || this.props.map.get('data');
-    const ymapData = data.filter(
+    const ymapData = data
+      .filter(
         item =>
-          item.getIn(['address', 'lat']) &&
-          item.getIn(['address', 'lng']),
-      ).map(item => ({
+          item.getIn(['address', 'lat']) && item.getIn(['address', 'lng']),
+      )
+      .map(item => ({
         type: 'Feature',
         id: item.get('id'),
         geometry: {

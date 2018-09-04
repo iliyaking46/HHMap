@@ -1,4 +1,4 @@
-import { LOAD_VACANCY, START, SUCCESS, FAIL } from '../../constants';
+import { LOAD_VACANCY, START, SUCCESS, FAIL } from '../constants';
 
 export function loadVacancy(vacancyId) {
   return dispatch => {

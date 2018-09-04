@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
 import { loader } from '../helpers';
 import { JobItem } from '../components/JobItem';
-import { loadData, loadPage, changeVacanciesPage } from '../actions/table';
+import { loadData, loadPage, changeVacanciesPage } from '../actions';
 import noJobs from '../nojobs.jpg';
 
 class JobsList extends PureComponent {
@@ -59,7 +59,9 @@ class JobsList extends PureComponent {
     return (
       <div className="mt-3">
         <h3 className="text-center">Найдено {found} вакансий</h3>
-        {currPage.get('items').map(item => <JobItem item={item} key={item.get('id')} />)}
+        {currPage
+          .get('items')
+          .map(item => <JobItem item={item} key={item.get('id')} />)}
         <div className="justify-content-center">
           <ReactPaginate
             previousLabel={'«'}
@@ -83,7 +85,7 @@ class JobsList extends PureComponent {
           />
         </div>
       </div>
-    )
+    );
   };
 
   render() {
@@ -103,10 +105,10 @@ class JobsList extends PureComponent {
             На главную
           </button>
         </div>
-      )
+      );
     }
     if (!isLoad) {
-      return this.renderLoader()
+      return this.renderLoader();
     }
 
     if (!isLoadData) {
@@ -119,13 +121,13 @@ class JobsList extends PureComponent {
         <div className="mt-3">
           <h3 className="text-center">Ууупс.. ничего не найдено</h3>
           <div className="text-center">
-            <img src={noJobs} alt="no jobs"/>
+            <img src={noJobs} alt="no jobs" />
           </div>
         </div>
-      )
+      );
     }
 
-    return this.renderList()
+    return this.renderList();
   }
 }
 export default connect(

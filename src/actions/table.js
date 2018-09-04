@@ -5,7 +5,7 @@ import {
   START,
   SUCCESS,
   FAIL,
-} from '../../constants';
+} from '../constants';
 
 export function loadData(params, push) {
   return dispatch => {
@@ -13,7 +13,7 @@ export function loadData(params, push) {
       type: LOAD_TABLE_DATA + START,
       payload: { data: [], isLoad: false, isLoadData: true },
     });
-    const baseUrl = `https://api.hh.ru/vacancies${params ? params : '?'}&area=1`;
+    const baseUrl = `https://api.hh.ru/vacancies${params || '?'}&area=1`;
     fetch(`${baseUrl}`)
       .then(resp => {
         push && push();
@@ -61,7 +61,8 @@ export function loadPage(params, page) {
       type: LOAD_PAGE_TABLE_DATA + START,
       payload: { isLoad: false },
     });
-    const baseUrl = `https://api.hh.ru/vacancies${params ? params : '?' }&area=1&page=${page}`;
+    const baseUrl = `https://api.hh.ru/vacancies${params ||
+      '?'}&area=1&page=${page}`;
     fetch(`${baseUrl}`)
       .then(resp => {
         if (resp.ok) {

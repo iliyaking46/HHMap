@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { fromJS } from 'immutable';
 import Map from './Map';
 import { loader } from '../helpers';
-import { loadVacancy } from '../actions/vacancy';
+import { loadVacancy } from '../actions';
 
 class VacancyPage extends PureComponent {
   static propTypes = {
@@ -25,16 +25,14 @@ class VacancyPage extends PureComponent {
     }
   }
 
-  renderBack = () => {
-    return (
-      <button
+  renderBack = () => (
+    <button
       className="btn btn-outline-dark mb-2 d-none d-lg-block"
       onClick={() => this.props.history.goBack()}
-      >
-        Назад
-      </button>
-    )
-  };
+    >
+      Назад
+    </button>
+  );
 
   render() {
     const { vacancies, isLoad, error } = this.props;
@@ -60,7 +58,7 @@ class VacancyPage extends PureComponent {
             На главную
           </button>
         </div>
-      )
+      );
     }
 
     return (

@@ -5,7 +5,7 @@ import {
   START,
   SUCCESS,
   FAIL,
-} from '../../constants';
+} from '../constants';
 
 export function loadMetro() {
   return dispatch => {
