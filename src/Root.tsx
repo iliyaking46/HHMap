@@ -10,7 +10,7 @@ import { Navigation } from './components/Navigation';
 
 const Root = () => (
   <Provider store={store}>
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route element={<Navigation />}>

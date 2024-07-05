@@ -1,19 +1,21 @@
 # HHmap
-React App for searching jobs on map
+React App for searching vacancies on map by using hh.ru open API
+
+See demo at https://iliyaking46.github.io/HHMap
 # Описание
-  Создание React приложения по поиску работы на карте, используя Yandex Maps API и HeadHunter API
+  React приложение по поиску работы на карте, используя Yandex Maps API и HeadHunter API
 # Установка
   Склонируйте или загрузите репозиторий
   ```Shell
-  $ git clone https://github.com/iliyaking46/hhmap.git
+  git clone https://github.com/iliyaking46/hhmap.git
   ```
   Установите зависимости командой
   ```shell
-    yarn install
+  yarn install
   ```
   или
   ```shell
-    npm install
+  npm install
   ```
   
   Запустите `yarn` или `npm` с командой `start` для запуска dev-сервера
